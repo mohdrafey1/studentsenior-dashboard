@@ -4,14 +4,11 @@ import { useState } from 'react';
 import { api } from '@/config/apiUrls';
 import toast from 'react-hot-toast';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const dispatch = useDispatch();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,6 +39,7 @@ const LoginPage = () => {
                 toast.error(data.message);
             }
         } catch (error) {
+            console.error('Login error:', error);
             toast.error('Something went wrong!');
         } finally {
             setLoading(false);
