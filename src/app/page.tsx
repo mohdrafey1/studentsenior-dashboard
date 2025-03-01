@@ -52,9 +52,7 @@ const Home = () => {
                 setColleges(data);
             } catch (error) {
                 console.error('Error fetching colleges:', error);
-                toast.error(
-                    'Access Denied, You are not allowed to do this operation'
-                );
+                toast.error('Something error occured fetching colleges');
             } finally {
                 setLoading(false);
             }

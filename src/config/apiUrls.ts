@@ -12,5 +12,6 @@ export const api = {
         getColleges: `${API_BASE_URL}/dashboard/college`,
         editCollege: `${API_BASE_URL}/dashboard/college`,
         deleteCollege: `${API_BASE_URL}/dashboard/college`,
+        collegeData: `${API_BASE_URL}/dashboard/college/collegeData`,
     },
 };
