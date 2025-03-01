@@ -172,7 +172,7 @@ const Home = () => {
                         <CollegeCard college={college} />
 
                         {/* Edit and Delete Buttons */}
-                        <div className="absolute top-4 right-4 flex gap-2">
+                        <div className="absolute bottom-4 right-4 flex gap-2">
                             <button
                                 onClick={() => setEditingCollege(college)}
                                 className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"

@@ -53,11 +53,11 @@ const Header = () => {
                     <Link href="/" className="hover:text-indigo-500">
                         Home
                     </Link>
-                    <Link href="/add-college" className="hover:text-indigo-500">
-                        Add College
+                    <Link href="/reports" className="hover:text-indigo-500">
+                        Reports
                     </Link>
-                    <Link href="/users" className="hover:text-indigo-500">
-                        Users
+                    <Link href="/profile" className="hover:text-indigo-500">
+                        Profile
                     </Link>
                 </nav>
 
@@ -117,7 +117,7 @@ const Header = () => {
 
             {/* Mobile Navigation Drawer */}
             <div
-                className={`fixed inset-0 bg-white bg-opacity-50 transition-opacity ${
+                className={`fixed inset-0 bg-white dark:bg-gray-700 bg-opacity-50 transition-opacity ${
                     isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 } md:hidden`}
                 onClick={toggleMenu}

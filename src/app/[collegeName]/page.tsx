@@ -107,6 +107,7 @@ const CollegeDataPage = () => {
                     value={data?.totalSeniors || 0}
                     previousValue={previousData?.totalSeniors || 0}
                     icon="🎓"
+                    href={`${collegeName}/seniors`}
                 />
 
                 {/* Total Products */}
@@ -124,6 +125,7 @@ const CollegeDataPage = () => {
                     value={data?.totalPost || 0}
                     previousValue={previousData?.totalPost || 0}
                     icon="📢"
+                    href={`${collegeName}/posts`}
                 />
 
                 {/* Total Lost & Found */}

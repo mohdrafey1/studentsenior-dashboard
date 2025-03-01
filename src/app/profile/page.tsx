@@ -14,5 +14,5 @@ export default function Users() {
         }
     }, [dispatch]);
 
-    return <div>Welcome to New User</div>;
+    return <div className="m-40">Welcome to Your Profile Page</div>;
 }
