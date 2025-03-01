@@ -1,101 +1,219 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { useEffect, useState } from 'react';
+import { api } from '@/config/apiUrls';
+import { Spinner } from '@/components/ui/Spinner';
+import CollegeCard from '@/components/College/CollegeCard';
+import DeleteConfirmationModal from '@/components/ui/DeleteConfirmationModal';
+import EditCollegeModal from '@/components/College/EditCollegeModal';
+import toast from 'react-hot-toast';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/redux/slices/authSlice';
+import { checkTokenExpiration } from '@/redux/slices/authSlice';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+interface College {
+    _id: string;
+    name: string;
+    description: string;
+    location: string;
+    slug: string;
+    status: boolean;
 }
+
+const Home = () => {
+    const [colleges, setColleges] = useState<College[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [showInactive, setShowInactive] = useState(false);
+    const [editingCollege, setEditingCollege] = useState<College | null>(null);
+    const [collegeToDelete, setCollegeToDelete] = useState<College | null>(
+        null
+    );
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!checkTokenExpiration()) {
+            dispatch(logout());
+        }
+    }, [dispatch]);
+
+    const token =
+        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+    useEffect(() => {
+        const fetchColleges = async () => {
+            try {
+                const res = await fetch(`${api.college.getColleges}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const data = await res.json();
+                setColleges(data);
+            } catch (error) {
+                console.error('Error fetching colleges:', error);
+                toast.error(
+                    'Access Denied, You are not allowed to do this operation'
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchColleges();
+    }, [token]);
+
+    const handleDelete = async () => {
+        if (!collegeToDelete || !token) return;
+
+        try {
+            const res = await fetch(
+                `${api.college.deleteCollege}/${collegeToDelete._id}`,
+                {
+                    method: 'DELETE',
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+
+            if (res.ok) {
+                setColleges(
+                    colleges.filter(
+                        (college) => college._id !== collegeToDelete._id
+                    )
+                );
+                toast.success('College deleted successfully!');
+                setCollegeToDelete(null);
+            } else {
+                toast.error(
+                    'Access Denied, You are not allowed to do this operation'
+                );
+            }
+        } catch (error) {
+            console.error('Error deleting college:', error);
+            toast.error('Error deleting college');
+        }
+    };
+
+    const handleSaveCollege = async (updatedCollege: College) => {
+        if (!token) return;
+
+        try {
+            const res = await fetch(
+                `${api.college.deleteCollege}/${updatedCollege._id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(updatedCollege),
+                }
+            );
+
+            if (res.ok) {
+                setColleges(
+                    colleges.map((college) =>
+                        college._id === updatedCollege._id
+                            ? updatedCollege
+                            : college
+                    )
+                );
+                toast.success('College updated successfully!');
+                setEditingCollege(null);
+            } else {
+                toast.error(
+                    'Access Denied, You are not allowed to do this operation'
+                );
+            }
+        } catch (error) {
+            console.error('Error updating college:', error);
+            toast.error('Error updating college');
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Spinner size={3} />
+            </div>
+        );
+    }
+
+    const filteredColleges = showInactive
+        ? colleges
+        : colleges.filter((college) => college.status);
+
+    return (
+        <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+            <h1 className="text-3xl font-bold text-center text-indigo-400 mb-8">
+                Colleges
+            </h1>
+
+            {/* Toggle Button to Show/Hide Inactive Colleges */}
+            <div className="flex justify-center mb-8">
+                <button
+                    onClick={() => setShowInactive(!showInactive)}
+                    className="px-4 py-2 bg-indigo-400 text-white rounded-md hover:bg-indigo-500 transition-colors flex items-center gap-2"
+                >
+                    {showInactive ? (
+                        <>
+                            <span>Hide Inactive Colleges</span>
+                        </>
+                    ) : (
+                        <>
+                            <span>Show Inactive Colleges</span>
+                        </>
+                    )}
+                </button>
+            </div>
+
+            {/* College Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredColleges.map((college) => (
+                    <div key={college._id} className="relative">
+                        {/* College Card */}
+                        <CollegeCard college={college} />
+
+                        {/* Edit and Delete Buttons */}
+                        <div className="absolute top-4 right-4 flex gap-2">
+                            <button
+                                onClick={() => setEditingCollege(college)}
+                                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+                                aria-label="Edit College"
+                            >
+                                <FaEdit className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => setCollegeToDelete(college)}
+                                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors"
+                                aria-label="Delete College"
+                            >
+                                <FaTrash className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Delete Confirmation Modal */}
+            {collegeToDelete && (
+                <DeleteConfirmationModal
+                    isOpen={!!collegeToDelete}
+                    onClose={() => setCollegeToDelete(null)}
+                    onConfirm={handleDelete}
+                    title="Delete College"
+                    message={`Are you sure you want to delete ${collegeToDelete.name}? This action cannot be undone.`}
+                />
+            )}
+
+            {editingCollege && (
+                <EditCollegeModal
+                    college={editingCollege}
+                    onClose={() => setEditingCollege(null)}
+                    onSave={handleSaveCollege}
+                />
+            )}
+        </div>
+    );
+};
+
+export default Home;
