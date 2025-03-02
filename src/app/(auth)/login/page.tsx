@@ -88,7 +88,7 @@ const LoginPage = () => {
                     >
                         {loading ? (
                             <div className="flex items-center justify-center">
-                                <Spinner size={1} />
+                                <Spinner size={0.5} />
                                 Logging in...
                             </div>
                         ) : (

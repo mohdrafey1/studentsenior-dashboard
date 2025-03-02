@@ -8,6 +8,11 @@ export const api = {
         signup: `${API_BASE_URL}/dashboard/auth/signup`,
     },
 
+    user: {
+        allUser: `${API_BASE_URL}/dashboard/user`,
+        allDashboardUser: `${API_BASE_URL}/dashboard/user/dashboarduser`,
+    },
+
     college: {
         getColleges: `${API_BASE_URL}/dashboard/college`,
         editCollege: `${API_BASE_URL}/dashboard/college`,
