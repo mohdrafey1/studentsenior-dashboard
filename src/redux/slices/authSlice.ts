@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
-    isAuthenticated:
-        typeof window !== 'undefined' ? !!localStorage.getItem('token') : false,
+    token: null,
+    isAuthenticated: false,
 };
 
 const authSlice = createSlice({
@@ -11,14 +10,17 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            state.token = action.payload;
+            const { token, expirationTime } = action.payload;
+            state.token = token;
             state.isAuthenticated = true;
-            localStorage.setItem('token', action.payload);
+            localStorage.setItem('token', token);
+            localStorage.setItem('token_expiration', expirationTime);
         },
         logout: (state) => {
             state.token = null;
             state.isAuthenticated = false;
             localStorage.removeItem('token');
+            localStorage.removeItem('token_expiration');
         },
     },
 });
@@ -28,6 +30,8 @@ export default authSlice.reducer;
 
 // Function to check token expiration
 export const checkTokenExpiration = () => {
+    if (typeof window === 'undefined') return false;
+
     const token = localStorage.getItem('token');
     const expiration = localStorage.getItem('token_expiration');
 

@@ -14,4 +14,8 @@ export const api = {
         deleteCollege: `${API_BASE_URL}/dashboard/college`,
         collegeData: `${API_BASE_URL}/dashboard/college/collegeData`,
     },
+
+    report: {
+        stats: `${API_BASE_URL}/dashboard/stats`,
+    },
 };

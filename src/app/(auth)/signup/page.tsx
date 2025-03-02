@@ -10,6 +10,8 @@ import {
     FaUniversity,
     FaKey,
 } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { login } from '@/redux/slices/authSlice';
 
 const SignupPage = () => {
     const [email, setEmail] = useState('');
@@ -17,6 +19,8 @@ const SignupPage = () => {
     const [name, setName] = useState('');
     const [college, setCollege] = useState('');
     const [secretCode, setSecretCode] = useState('');
+
+    const dispatch = useDispatch();
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,13 +42,10 @@ const SignupPage = () => {
         if (res.ok) {
             toast.success(`Signup successful! Your role: ${data.role}`);
 
-            // Decode token to get expiration time
             const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
-            const expirationTime = tokenPayload.exp * 1000; // Convert to milliseconds
+            const expirationTime = tokenPayload.exp * 1000;
 
-            // Store token and expiration in localStorage
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('token_expiration', expirationTime.toString());
+            dispatch(login({ token: data.token, expirationTime }));
 
             window.location.href = '/';
         } else {

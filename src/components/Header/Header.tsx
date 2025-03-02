@@ -1,18 +1,22 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/redux/slices/authSlice';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import { RootState } from '@/redux/store';
 
 const Header = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(!!token);
-
         const storedTheme = localStorage.getItem('theme');
         if (storedTheme === 'dark') {
             setIsDarkMode(true);
@@ -20,26 +24,19 @@ const Header = () => {
         }
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('token_expiration');
-        setIsAuthenticated(false);
-        window.location.href = '/login';
-    };
-
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        if (!isDarkMode) {
+    useEffect(() => {
+        if (isDarkMode) {
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         }
-    };
+    }, [isDarkMode]);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const handleLogout = () => {
+        dispatch(logout());
+        router.push('/login');
     };
 
     return (
@@ -49,6 +46,7 @@ const Header = () => {
                     StudentSenior
                 </Link>
 
+                {/* Desktop Navigation */}
                 <nav className="hidden md:flex space-x-6">
                     <Link href="/" className="hover:text-indigo-500">
                         Home
@@ -65,8 +63,8 @@ const Header = () => {
                 <div className="flex items-center space-x-4">
                     {/* Theme Toggle */}
                     <button
-                        onClick={toggleTheme}
-                        className="p-2 rounded-full transition-colors duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                        onClick={() => setIsDarkMode(!isDarkMode)}
+                        className="p-2 rounded-full transition hover:bg-gray-200 dark:hover:bg-gray-700"
                         aria-label="Toggle Dark Mode"
                     >
                         {isDarkMode ? (
@@ -103,8 +101,8 @@ const Header = () => {
 
                 {/* Mobile Menu Button */}
                 <button
-                    onClick={toggleMenu}
-                    className="md:hidden p-2 focus:outline-none"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="md:hidden p-2"
                     aria-label="Toggle Menu"
                 >
                     {isMenuOpen ? (
@@ -116,20 +114,20 @@ const Header = () => {
             </div>
 
             {/* Mobile Navigation Drawer */}
-            <div
-                className={`fixed inset-0 bg-white dark:bg-gray-700 bg-opacity-50 transition-opacity ${
-                    isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                } md:hidden`}
-                onClick={toggleMenu}
-            ></div>
+            {isMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-gray-200 dark:bg-gray-800 bg-opacity-30 z-40"
+                    onClick={() => setIsMenuOpen(false)}
+                ></div>
+            )}
 
             <nav
                 className={`fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg transform ${
                     isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-                } transition-transform md:hidden flex flex-col items-start p-6 space-y-6`}
+                } transition-transform md:hidden flex flex-col items-start p-6 space-y-6 z-50`}
             >
                 <button
-                    onClick={toggleMenu}
+                    onClick={() => setIsMenuOpen(false)}
                     className="self-end p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                     aria-label="Close Menu"
                 >
@@ -139,23 +137,23 @@ const Header = () => {
                 <Link
                     href="/"
                     className="text-lg hover:text-indigo-500"
-                    onClick={toggleMenu}
+                    onClick={() => setIsMenuOpen(false)}
                 >
                     Home
                 </Link>
                 <Link
-                    href="/add-college"
+                    href="/reports"
                     className="text-lg hover:text-indigo-500"
-                    onClick={toggleMenu}
+                    onClick={() => setIsMenuOpen(false)}
                 >
-                    Add College
+                    Reports
                 </Link>
                 <Link
-                    href="/users"
+                    href="/profile"
                     className="text-lg hover:text-indigo-500"
-                    onClick={toggleMenu}
+                    onClick={() => setIsMenuOpen(false)}
                 >
-                    Users
+                    Profile
                 </Link>
 
                 <div className="border-t w-full pt-4">
@@ -163,7 +161,7 @@ const Header = () => {
                         <button
                             onClick={() => {
                                 handleLogout();
-                                toggleMenu();
+                                setIsMenuOpen(false);
                             }}
                             className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
                         >
@@ -174,14 +172,14 @@ const Header = () => {
                             <Link
                                 href="/login"
                                 className="block text-center px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition"
-                                onClick={toggleMenu}
+                                onClick={() => setIsMenuOpen(false)}
                             >
                                 Login
                             </Link>
                             <Link
                                 href="/signup"
                                 className="block text-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                                onClick={toggleMenu}
+                                onClick={() => setIsMenuOpen(false)}
                             >
                                 Sign Up
                             </Link>

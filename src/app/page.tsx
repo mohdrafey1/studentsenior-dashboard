@@ -24,6 +24,7 @@ interface College {
 const Home = () => {
     const [colleges, setColleges] = useState<College[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [showInactive, setShowInactive] = useState(false);
     const [editingCollege, setEditingCollege] = useState<College | null>(null);
     const [collegeToDelete, setCollegeToDelete] = useState<College | null>(
@@ -52,6 +53,7 @@ const Home = () => {
                 setColleges(data);
             } catch (error) {
                 console.error('Error fetching colleges:', error);
+                setError('Something error occured fetching colleges');
                 toast.error('Something error occured fetching colleges');
             } finally {
                 setLoading(false);
@@ -135,6 +137,13 @@ const Home = () => {
             </div>
         );
     }
+
+    if (error)
+        return (
+            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
+                {error}
+            </div>
+        );
 
     const filteredColleges = showInactive
         ? colleges
