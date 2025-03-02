@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
 import { getDateRange } from '@/utils/dateUtils';
+import Image from 'next/image';
 
 interface User {
     _id: string;
@@ -160,7 +161,7 @@ const Users = () => {
                                 className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
                             >
                                 <div className="flex flex-col justify-center items-center space-x-6">
-                                    <img
+                                    <Image
                                         src={user.profilePicture}
                                         alt={user.username}
                                         className="w-20 h-20 rounded-full border-4 border-indigo-400 dark:border-indigo-500"

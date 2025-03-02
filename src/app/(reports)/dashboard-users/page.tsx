@@ -51,7 +51,7 @@ const DashboardUser = () => {
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     useEffect(() => {
         let filtered = data;
