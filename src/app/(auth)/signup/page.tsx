@@ -132,7 +132,7 @@ const SignupPage = () => {
                         Sign Up
                     </button>
                     <Link href={'/login'} className="text-center">
-                        Already registered ? Sign In
+                        Already have an Account ? Sign In
                     </Link>
                 </form>
             </div>

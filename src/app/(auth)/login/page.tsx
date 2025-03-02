@@ -96,7 +96,7 @@ const LoginPage = () => {
                         )}
                     </button>
                     <Link href={'/signup'} className="text-center">
-                        Haven't registered yet ? Sign Up
+                        Don&apos;t have an account? Sign up now!
                     </Link>
                 </form>
             </div>
