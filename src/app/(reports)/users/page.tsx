@@ -162,9 +162,20 @@ const Users = () => {
                             >
                                 <div className="flex flex-col justify-center items-center space-x-6">
                                     <Image
-                                        src={user.profilePicture}
-                                        alt={user.username}
-                                        className="w-20 h-20 rounded-full border-4 border-indigo-400 dark:border-indigo-500"
+                                        src={
+                                            user.profilePicture
+                                                ? user.profilePicture.replace(
+                                                      '=s96-c',
+                                                      ''
+                                                  )
+                                                : '/default-avatar.png'
+                                        }
+                                        alt={user.username || 'User Avatar'}
+                                        className="rounded-full border-4 border-indigo-400 dark:border-indigo-500"
+                                        width={80}
+                                        height={80}
+                                        priority
+                                        unoptimized
                                     />
 
                                     <div className="flex-1">
