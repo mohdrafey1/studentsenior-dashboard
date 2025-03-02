@@ -1,6 +1,6 @@
-export const API_BASE_URL = process.env.API_URL;
-export const API_KEY = process.env.API_KEY;
-export const API_KEY_URL = process.env.API_KEY_URL;
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+export const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+export const API_KEY_URL = process.env.NEXT_PUBLIC_API_KEY_URL;
 
 export const api = {
     auth: {
