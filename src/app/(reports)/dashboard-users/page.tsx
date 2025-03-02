@@ -35,7 +35,13 @@ const DashboardUser = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                if (!res.ok) throw new Error(res.statusText);
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(
+                        errorData.message || 'Something Error Occured'
+                    );
+                }
+
                 const jsonData: User[] = await res.json();
 
                 setData(jsonData);

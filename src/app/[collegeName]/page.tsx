@@ -86,7 +86,7 @@ const CollegeDataPage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Total New PYQs */}
                     <StatCard
-                        title="Total New PYQs"
+                        title="Total PYQs"
                         value={data?.totalNewPyqs || 0}
                         previousValue={previousData?.totalNewPyqs || 0}
                         icon="📩"
