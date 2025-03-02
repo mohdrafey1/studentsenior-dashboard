@@ -42,25 +42,24 @@ const Home = () => {
     const token =
         typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-    useEffect(() => {
-        const fetchColleges = async () => {
-            try {
-                const res = await fetch(`${api.college.getColleges}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+    const fetchColleges = async () => {
+        try {
+            const res = await fetch(`${api.college.getColleges}`);
+            if (!res.ok) throw new Error('Failed to fetch colleges');
+            const data = await res.json();
+            setColleges(data);
+        } catch (error) {
+            console.error('Error fetching colleges:', error);
+            setError('Something went wrong while fetching colleges.');
+            toast.error('Error fetching colleges.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                const data = await res.json();
-                setColleges(data);
-            } catch (error) {
-                console.error('Error fetching colleges:', error);
-                setError('Something error occured fetching colleges');
-                toast.error('Something error occured fetching colleges');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchColleges();
-    }, [token]);
+    useEffect(() => {
+        if (colleges.length === 0) fetchColleges();
+    }, []);
 
     const handleDelete = async () => {
         if (!collegeToDelete || !token) return;

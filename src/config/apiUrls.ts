@@ -23,4 +23,10 @@ export const api = {
     report: {
         stats: `${API_BASE_URL}/dashboard/stats`,
     },
+
+    resource: {
+        courses: `${API_BASE_URL}/dashboard/resource/courses`,
+        branches: `${API_BASE_URL}/dashboard/resource/branches`,
+        subjects: `${API_BASE_URL}/dashboard/resource/subjects`,
+    },
 };
