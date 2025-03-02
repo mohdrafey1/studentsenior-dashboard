@@ -7,6 +7,7 @@ import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { login } from '@/redux/slices/authSlice';
 import { Spinner } from '@/components/ui/Spinner';
+import Link from 'next/link';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -50,8 +51,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-indigo-50">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+        <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+            <div className="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
                 <h2 className="text-3xl font-bold text-center text-indigo-400">
                     Login
                 </h2>
@@ -94,6 +95,9 @@ const LoginPage = () => {
                             'Login'
                         )}
                     </button>
+                    <Link href={'/signup'} className="text-center">
+                        Haven't registered yet ? Sign Up
+                    </Link>
                 </form>
             </div>
         </div>

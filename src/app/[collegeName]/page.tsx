@@ -66,7 +66,7 @@ const CollegeDataPage = () => {
 
     if (loading)
         return (
-            <div className="flex justify-center items-center min-h-screen">
+            <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-700">
                 <Spinner size={3} />
             </div>
         );
@@ -78,93 +78,95 @@ const CollegeDataPage = () => {
         );
 
     return (
-        <div className="p-6 max-w-6xl mx-auto bg-white dark:bg-gray-900 shadow-lg rounded-lg mt-16">
-            <h1 className="text-3xl text-center font-bold mb-8 text-indigo-500 dark:text-indigo-400">
-                {capitalizeWords(collegeName as string)} Stats
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Total New PYQs */}
-                <StatCard
-                    title="Total New PYQs"
-                    value={data?.totalNewPyqs || 0}
-                    previousValue={previousData?.totalNewPyqs || 0}
-                    icon="📩"
-                    href={`${collegeName}/pyqs`}
-                />
+        <main className="h-screen bg-indigo-50 dark:bg-gray-900">
+            <div className="p-6 max-w-6xl mx-auto bg-indigo-50 dark:bg-gray-900 shadow-lg rounded-lg mt-16">
+                <h1 className="text-3xl text-center font-bold mb-8 text-indigo-500 dark:text-indigo-400">
+                    {capitalizeWords(collegeName as string)} Stats
+                </h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Total New PYQs */}
+                    <StatCard
+                        title="Total New PYQs"
+                        value={data?.totalNewPyqs || 0}
+                        previousValue={previousData?.totalNewPyqs || 0}
+                        icon="📩"
+                        href={`${collegeName}/pyqs`}
+                    />
 
-                {/* Total Notes */}
-                <StatCard
-                    title="Total Notes"
-                    value={data?.totalNotes || 0}
-                    previousValue={previousData?.totalNotes || 0}
-                    icon="📚"
-                    href={`${collegeName}/notes`}
-                />
+                    {/* Total Notes */}
+                    <StatCard
+                        title="Total Notes"
+                        value={data?.totalNotes || 0}
+                        previousValue={previousData?.totalNotes || 0}
+                        icon="📚"
+                        href={`${collegeName}/notes`}
+                    />
 
-                {/* Total Seniors */}
-                <StatCard
-                    title="Total Seniors"
-                    value={data?.totalSeniors || 0}
-                    previousValue={previousData?.totalSeniors || 0}
-                    icon="🎓"
-                    href={`${collegeName}/seniors`}
-                />
+                    {/* Total Seniors */}
+                    <StatCard
+                        title="Total Seniors"
+                        value={data?.totalSeniors || 0}
+                        previousValue={previousData?.totalSeniors || 0}
+                        icon="🎓"
+                        href={`${collegeName}/seniors`}
+                    />
 
-                {/* Total Products */}
-                <StatCard
-                    title="Total Products"
-                    value={data?.totalProduct || 0}
-                    previousValue={previousData?.totalProduct || 0}
-                    icon="🛒"
-                    href={`${collegeName}/products`}
-                />
+                    {/* Total Products */}
+                    <StatCard
+                        title="Total Products"
+                        value={data?.totalProduct || 0}
+                        previousValue={previousData?.totalProduct || 0}
+                        icon="🛒"
+                        href={`${collegeName}/products`}
+                    />
 
-                {/* Total Posts */}
-                <StatCard
-                    title="Total Posts"
-                    value={data?.totalPost || 0}
-                    previousValue={previousData?.totalPost || 0}
-                    icon="📢"
-                    href={`${collegeName}/posts`}
-                />
+                    {/* Total Posts */}
+                    <StatCard
+                        title="Total Posts"
+                        value={data?.totalPost || 0}
+                        previousValue={previousData?.totalPost || 0}
+                        icon="📢"
+                        href={`${collegeName}/posts`}
+                    />
 
-                {/* Total Lost & Found */}
-                <StatCard
-                    title="Total Lost & Found"
-                    value={data?.totalLostFound || 0}
-                    previousValue={previousData?.totalLostFound || 0}
-                    icon="🆘"
-                    href={`${collegeName}/lost-found`}
-                />
+                    {/* Total Lost & Found */}
+                    <StatCard
+                        title="Total Lost & Found"
+                        value={data?.totalLostFound || 0}
+                        previousValue={previousData?.totalLostFound || 0}
+                        icon="🆘"
+                        href={`${collegeName}/lost-found`}
+                    />
 
-                {/* Total Groups */}
-                <StatCard
-                    title="Total Groups"
-                    value={data?.totalGroups || 0}
-                    previousValue={previousData?.totalGroups || 0}
-                    icon="👥"
-                    href={`${collegeName}/groups`}
-                />
+                    {/* Total Groups */}
+                    <StatCard
+                        title="Total Groups"
+                        value={data?.totalGroups || 0}
+                        previousValue={previousData?.totalGroups || 0}
+                        icon="👥"
+                        href={`${collegeName}/groups`}
+                    />
 
-                {/* Total Community Opportunities */}
-                <StatCard
-                    title="Total Opportunities"
-                    value={data?.totalGiveOpportunity || 0}
-                    previousValue={previousData?.totalGiveOpportunity || 0}
-                    icon="💡"
-                    href={`${collegeName}/community`}
-                />
+                    {/* Total Community Opportunities */}
+                    <StatCard
+                        title="Total Opportunities"
+                        value={data?.totalGiveOpportunity || 0}
+                        previousValue={previousData?.totalGiveOpportunity || 0}
+                        icon="💡"
+                        href={`${collegeName}/community`}
+                    />
 
-                {/* Total Requested PYQs */}
-                <StatCard
-                    title="Total Requested PYQs"
-                    value={data?.totalRequestedPyqs || 0}
-                    previousValue={previousData?.totalRequestedPyqs || 0}
-                    icon="📝"
-                    href={`${collegeName}/requested-pyq`}
-                />
+                    {/* Total Requested PYQs */}
+                    <StatCard
+                        title="Total Requested PYQs"
+                        value={data?.totalRequestedPyqs || 0}
+                        previousValue={previousData?.totalRequestedPyqs || 0}
+                        icon="📝"
+                        href={`${collegeName}/requested-pyq`}
+                    />
+                </div>
             </div>
-        </div>
+        </main>
     );
 };
 

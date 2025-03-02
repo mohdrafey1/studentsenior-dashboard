@@ -22,7 +22,7 @@ const StatCard = ({
             <h2 className="text-xl font-semibold text-indigo-500 dark:text-indigo-400">
                 {icon} {title}
             </h2>
-            <p className="text-2xl font-bold mt-2">
+            <p className="text-2xl font-bold mt-2 text-black dark:text-white">
                 {value}
                 {increase > 0 && (
                     <span className="text-sm text-green-500 ml-2">

@@ -56,7 +56,7 @@ const ReportPage = () => {
 
     if (loading)
         return (
-            <div className="flex justify-center items-center min-h-screen">
+            <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-700">
                 <Spinner size={3} />
             </div>
         );
@@ -68,93 +68,97 @@ const ReportPage = () => {
         );
 
     return (
-        <div className="p-6 max-w-6xl mx-auto bg-white dark:bg-gray-900 shadow-lg rounded-lg mt-16">
-            <h1 className="text-3xl text-center font-bold mb-8 text-indigo-500 dark:text-indigo-400">
-                Report Stats
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Total Subjects */}
-                <StatCard
-                    title="Total Subjects"
-                    value={data?.totalSubjects || 0}
-                    previousValue={previousData?.totalSubjects || 0}
-                    icon="📚"
-                    href={`/subjects`}
-                />
+        <main className="h-screen bg-indigo-50 dark:bg-gray-900">
+            <div className="p-6 max-w-6xl mx-auto bg-indigo-50 dark:bg-gray-900 shadow-lg rounded-lg mt-16">
+                <h1 className="text-3xl text-center font-bold mb-8 text-indigo-500 dark:text-indigo-400">
+                    Report Stats
+                </h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Total Subjects */}
+                    <StatCard
+                        title="Total Subjects"
+                        value={data?.totalSubjects || 0}
+                        previousValue={previousData?.totalSubjects || 0}
+                        icon="📚"
+                        href={`/subjects`}
+                    />
 
-                {/* Total Branch */}
-                <StatCard
-                    title="Total Branches"
-                    value={data?.totalBranch || 0}
-                    previousValue={previousData?.totalBranch || 0}
-                    icon="🏢"
-                    href={`/branches`}
-                />
+                    {/* Total Branch */}
+                    <StatCard
+                        title="Total Branches"
+                        value={data?.totalBranch || 0}
+                        previousValue={previousData?.totalBranch || 0}
+                        icon="🏢"
+                        href={`/branches`}
+                    />
 
-                {/* Total Course */}
-                <StatCard
-                    title="Total Courses"
-                    value={data?.totalCourse || 0}
-                    previousValue={previousData?.totalCourse || 0}
-                    icon="🎓"
-                    href={`/courses`}
-                />
+                    {/* Total Course */}
+                    <StatCard
+                        title="Total Courses"
+                        value={data?.totalCourse || 0}
+                        previousValue={previousData?.totalCourse || 0}
+                        icon="🎓"
+                        href={`/courses`}
+                    />
 
-                {/* Total Contacts */}
-                <StatCard
-                    title="Total Contact Us"
-                    value={data?.totalContactUs || 0}
-                    previousValue={previousData?.totalContactUs || 0}
-                    icon="📞"
-                    href={`/contactus`}
-                />
+                    {/* Total Contacts */}
+                    <StatCard
+                        title="Total Contact Us"
+                        value={data?.totalContactUs || 0}
+                        previousValue={previousData?.totalContactUs || 0}
+                        icon="📞"
+                        href={`/contactus`}
+                    />
 
-                {/* Total Add Points */}
-                <StatCard
-                    title="Total Add Points"
-                    value={data?.totalAddPointRequest || 0}
-                    previousValue={previousData?.totalAddPointRequest || 0}
-                    icon="➕"
-                    href={`/add-points`}
-                />
+                    {/* Total Add Points */}
+                    <StatCard
+                        title="Total Add Points"
+                        value={data?.totalAddPointRequest || 0}
+                        previousValue={previousData?.totalAddPointRequest || 0}
+                        icon="➕"
+                        href={`/add-points`}
+                    />
 
-                {/* Total Redemption */}
-                <StatCard
-                    title="Total Redemption"
-                    value={data?.totalRedemptionRequest || 0}
-                    previousValue={previousData?.totalRedemptionRequest || 0}
-                    icon="🎁"
-                    href={`/redemption-request`}
-                />
+                    {/* Total Redemption */}
+                    <StatCard
+                        title="Total Redemption"
+                        value={data?.totalRedemptionRequest || 0}
+                        previousValue={
+                            previousData?.totalRedemptionRequest || 0
+                        }
+                        icon="🎁"
+                        href={`/redemption-request`}
+                    />
 
-                {/* Total Users */}
-                <StatCard
-                    title="Total Users"
-                    value={data?.totalClient || 0}
-                    previousValue={previousData?.totalClient || 0}
-                    icon="👤"
-                    href={`/users`}
-                />
+                    {/* Total Users */}
+                    <StatCard
+                        title="Total Users"
+                        value={data?.totalClient || 0}
+                        previousValue={previousData?.totalClient || 0}
+                        icon="👤"
+                        href={`/users`}
+                    />
 
-                {/* Total Dashboard User */}
-                <StatCard
-                    title="Total Dashboard Users"
-                    value={data?.totalDashboardUser || 0}
-                    previousValue={previousData?.totalDashboardUser || 0}
-                    icon="📊"
-                    href={`/dashboard-user`}
-                />
+                    {/* Total Dashboard User */}
+                    <StatCard
+                        title="Total Dashboard Users"
+                        value={data?.totalDashboardUser || 0}
+                        previousValue={previousData?.totalDashboardUser || 0}
+                        icon="📊"
+                        href={`/dashboard-user`}
+                    />
 
-                {/* Total Affiliate Products */}
-                <StatCard
-                    title="Total Affiliate Products"
-                    value={data?.totalAffiliateProduct || 0}
-                    previousValue={previousData?.totalAffiliateProduct || 0}
-                    icon="🛍️"
-                    href={`/affiliate-products`}
-                />
+                    {/* Total Affiliate Products */}
+                    <StatCard
+                        title="Total Affiliate Products"
+                        value={data?.totalAffiliateProduct || 0}
+                        previousValue={previousData?.totalAffiliateProduct || 0}
+                        icon="🛍️"
+                        href={`/affiliate-products`}
+                    />
+                </div>
             </div>
-        </div>
+        </main>
     );
 };
 

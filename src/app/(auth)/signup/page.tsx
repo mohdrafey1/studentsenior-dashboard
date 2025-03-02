@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { login } from '@/redux/slices/authSlice';
+import Link from 'next/link';
 
 const SignupPage = () => {
     const [email, setEmail] = useState('');
@@ -54,8 +55,8 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-indigo-50">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+        <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+            <div className="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
                 <h2 className="text-3xl font-bold text-center text-indigo-400">
                     Sign Up
                 </h2>
@@ -130,6 +131,9 @@ const SignupPage = () => {
                     >
                         Sign Up
                     </button>
+                    <Link href={'/login'} className="text-center">
+                        Already registered ? Sign In
+                    </Link>
                 </form>
             </div>
         </div>

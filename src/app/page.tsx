@@ -132,7 +132,7 @@ const Home = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-700">
                 <Spinner size={3} />
             </div>
         );
@@ -150,7 +150,7 @@ const Home = () => {
         : colleges.filter((college) => college.status);
 
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
             <h1 className="text-3xl font-bold text-center text-indigo-400 mb-8">
                 Colleges
             </h1>
