@@ -40,7 +40,7 @@ const Users = () => {
                 const res = await fetch(`${api.user.allUser}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok) throw new Error('Failed to fetch data');
+                if (!res.ok) throw new Error(res.statusText);
                 const jsonData: User[] = await res.json();
 
                 setData(jsonData);
@@ -56,7 +56,7 @@ const Users = () => {
         };
 
         fetchData();
-    }, []);
+    }, [token]);
 
     useEffect(() => {
         let filtered = data;

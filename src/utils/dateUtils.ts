@@ -1,6 +1,6 @@
 export const getDateRange = (filter: string) => {
     const today = new Date();
-    let startDate = new Date();
+    const startDate = new Date();
     let endDate = today;
 
     switch (filter) {
