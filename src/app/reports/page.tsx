@@ -145,7 +145,7 @@ const ReportPage = () => {
                         value={data?.totalDashboardUser || 0}
                         previousValue={previousData?.totalDashboardUser || 0}
                         icon="📊"
-                        href={`/dashboard-user`}
+                        href={`/dashboard-users`}
                     />
 
                     {/* Total Affiliate Products */}
