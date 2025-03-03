@@ -16,7 +16,9 @@ interface ContactRequest {
 
 export default function ContactUs() {
     const [requests, setRequests] = useState<ContactRequest[]>([]);
-    const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
+    const [expanded, setExpanded] = useState<{
+        [key: string]: { subject: boolean; description: boolean };
+    }>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -59,8 +61,11 @@ export default function ContactUs() {
     );
     const totalPages = Math.ceil(requests.length / requestsPerPage);
 
-    const toggleExpand = (id: string) => {
-        setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+    const toggleExpand = (id: string, field: 'subject' | 'description') => {
+        setExpanded((prev) => ({
+            ...prev,
+            [id]: { ...prev[id], [field]: !prev[id]?.[field] },
+        }));
     };
 
     if (loading) {
@@ -109,19 +114,59 @@ export default function ContactUs() {
                                 key={request._id}
                                 className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
                             >
-                                <td
-                                    title={request.subject}
-                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 max-w-xs truncate"
-                                >
-                                    {request.subject}
+                                {/* Subject with Read More */}
+                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-24">
+                                    {expanded[request._id]?.subject ? (
+                                        <>
+                                            {request.subject}
+                                            <button
+                                                onClick={() =>
+                                                    toggleExpand(
+                                                        request._id,
+                                                        'subject'
+                                                    )
+                                                }
+                                                className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                            >
+                                                Read Less
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {request.subject.length > 15
+                                                ? `${request.subject.substring(
+                                                      0,
+                                                      15
+                                                  )}...`
+                                                : request.subject}
+                                            {request.subject.length > 15 && (
+                                                <button
+                                                    onClick={() =>
+                                                        toggleExpand(
+                                                            request._id,
+                                                            'subject'
+                                                        )
+                                                    }
+                                                    className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                                >
+                                                    Read More
+                                                </button>
+                                            )}
+                                        </>
+                                    )}
                                 </td>
+
+                                {/* Description with Read More */}
                                 <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
-                                    {expanded[request._id] ? (
+                                    {expanded[request._id]?.description ? (
                                         <>
                                             {request.description}
                                             <button
                                                 onClick={() =>
-                                                    toggleExpand(request._id)
+                                                    toggleExpand(
+                                                        request._id,
+                                                        'description'
+                                                    )
                                                 }
                                                 className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
                                             >
@@ -141,7 +186,8 @@ export default function ContactUs() {
                                                 <button
                                                     onClick={() =>
                                                         toggleExpand(
-                                                            request._id
+                                                            request._id,
+                                                            'description'
                                                         )
                                                     }
                                                     className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
@@ -152,6 +198,7 @@ export default function ContactUs() {
                                         </>
                                     )}
                                 </td>
+
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     {request.email}
                                 </td>
