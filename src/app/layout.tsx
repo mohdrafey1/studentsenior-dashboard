@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: 'Student Senior Dashboard',
     description: 'Your Companion Dashboard',
+    manifest: '/manifest.json',
 };
 
 export default function RootLayout({

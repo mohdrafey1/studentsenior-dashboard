@@ -59,7 +59,7 @@ const Home = () => {
 
     useEffect(() => {
         if (colleges.length === 0) fetchColleges();
-    }, []);
+    }, [colleges.length]);
 
     const handleDelete = async () => {
         if (!collegeToDelete || !token) return;
