@@ -54,8 +54,6 @@ export default function Transactions() {
     }, [token]);
 
     // Filter transactions
-    const trimmedSearchQuery = searchQuery.trim().toLowerCase();
-
     const filteredTransactions = transactions.filter(
         (transaction) =>
             (transaction.user?.email?.toLowerCase() || '').includes(
