@@ -36,7 +36,14 @@ const LoginPage = () => {
                 const expirationTime = tokenPayload.exp * 1000;
 
                 // Dispatch login action
-                dispatch(login({ token: data.token, expirationTime }));
+                dispatch(
+                    login({
+                        token: data.token,
+                        expirationTime,
+                        role: data.role,
+                        email: email,
+                    })
+                );
 
                 window.location.href = '/';
             } else {

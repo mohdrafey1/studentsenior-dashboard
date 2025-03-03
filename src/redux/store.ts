@@ -3,9 +3,16 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from './slices/authSlice';
 
+// Noop storage to avoid server-side errors
+const noopStorage = {
+    getItem: () => Promise.resolve(null),
+    setItem: () => Promise.resolve(),
+    removeItem: () => Promise.resolve(),
+};
+
 const persistConfig = {
     key: 'auth',
-    storage,
+    storage: typeof window !== 'undefined' ? storage : noopStorage,
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
