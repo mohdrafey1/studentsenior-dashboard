@@ -101,15 +101,6 @@ const ReportPage = () => {
                         href={`/courses`}
                     />
 
-                    {/* Total Contacts */}
-                    <StatCard
-                        title="Total Contact Us"
-                        value={data?.totalContactUs || 0}
-                        previousValue={previousData?.totalContactUs || 0}
-                        icon="📞"
-                        href={`/contactus`}
-                    />
-
                     {/* Total Add Points */}
                     <StatCard
                         title="Total Add Points"
@@ -130,7 +121,14 @@ const ReportPage = () => {
                         href={`/redemption-request`}
                     />
 
-                    {/* Total Users */}
+                    <StatCard
+                        title="Total Transactions"
+                        value={data?.totalTransactions || 0}
+                        previousValue={previousData?.totalTransactions || 0}
+                        icon="🛍️"
+                        href={`/transactions`}
+                    />
+
                     <StatCard
                         title="Total Users"
                         value={data?.totalClient || 0}
@@ -148,7 +146,14 @@ const ReportPage = () => {
                         href={`/dashboard-users`}
                     />
 
-                    {/* Total Affiliate Products */}
+                    <StatCard
+                        title="Total Contact Us"
+                        value={data?.totalContactUs || 0}
+                        previousValue={previousData?.totalContactUs || 0}
+                        icon="📞"
+                        href={`/contactus`}
+                    />
+
                     <StatCard
                         title="Total Affiliate Products"
                         value={data?.totalAffiliateProduct || 0}

@@ -22,11 +22,18 @@ export const api = {
 
     report: {
         stats: `${API_BASE_URL}/dashboard/stats`,
+        contactus: `${API_BASE_URL}/dashboard/stats/contactus`,
     },
 
     resource: {
         courses: `${API_BASE_URL}/dashboard/resource/courses`,
         branches: `${API_BASE_URL}/dashboard/resource/branches`,
         subjects: `${API_BASE_URL}/dashboard/resource/subjects`,
+    },
+
+    transactions: {
+        transaction: `${API_BASE_URL}/dashboard/transactions`,
+        redemption: `${API_BASE_URL}/dashboard/transactions/redemption`,
+        addPoint: `${API_BASE_URL}/dashboard/transactions/add-points`,
     },
 };
