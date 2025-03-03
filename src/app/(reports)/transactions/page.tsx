@@ -48,9 +48,10 @@ export default function Transactions() {
                 const data: Transaction[] = await res.json();
                 setTransactions(data);
             } catch (error) {
-                console.error('Error fetching transactions:', error);
-                setError('Something went wrong while fetching transactions');
-                toast.error('Something went wrong while fetching transactions');
+                if (error instanceof Error) {
+                    setError(error.message);
+                    toast.error(error.message);
+                }
             } finally {
                 setLoading(false);
             }

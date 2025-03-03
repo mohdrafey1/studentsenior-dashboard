@@ -41,18 +41,21 @@ export default function AddPoints() {
                 const res = await fetch(`${api.transactions.addPoint}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok)
-                    throw new Error('Failed to fetch add point requests');
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    console.log(errorData);
+
+                    throw new Error(
+                        errorData.message || 'Something Error Occured'
+                    );
+                }
                 const data: AddPointRequest[] = await res.json();
                 setRequests(data);
             } catch (error) {
-                console.error('Error fetching add point requests:', error);
-                setError(
-                    'Something went wrong while fetching add point requests'
-                );
-                toast.error(
-                    'Something went wrong while fetching add point requests'
-                );
+                if (error instanceof Error) {
+                    setError(error.message);
+                    toast.error(error.message);
+                }
             } finally {
                 setLoading(false);
             }

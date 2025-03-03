@@ -44,13 +44,10 @@ export default function RedemptionRequests() {
                 const data: RedemptionRequest[] = await res.json();
                 setRequests(data);
             } catch (error) {
-                console.error('Error fetching redemption requests:', error);
-                setError(
-                    'Something went wrong while fetching redemption requests'
-                );
-                toast.error(
-                    'Something went wrong while fetching redemption requests'
-                );
+                if (error instanceof Error) {
+                    setError(error.message);
+                    toast.error(error.message);
+                }
             } finally {
                 setLoading(false);
             }
