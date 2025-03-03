@@ -39,7 +39,12 @@ export default function Transactions() {
                 const res = await fetch(`${api.transactions.transaction}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok) throw new Error('Failed to fetch transactions');
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(
+                        errorData.message || 'Something Error Occured'
+                    );
+                }
                 const data: Transaction[] = await res.json();
                 setTransactions(data);
             } catch (error) {

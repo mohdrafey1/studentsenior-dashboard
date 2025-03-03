@@ -33,8 +33,12 @@ export default function ContactUs() {
                 const res = await fetch(`${api.report.contactus}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok)
-                    throw new Error('Failed to fetch contact requests');
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(
+                        errorData.message || 'Something Error Occured'
+                    );
+                }
                 const data: ContactRequest[] = await res.json();
                 setRequests(data);
             } catch (error) {

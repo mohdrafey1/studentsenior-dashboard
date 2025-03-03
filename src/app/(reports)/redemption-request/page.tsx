@@ -35,8 +35,12 @@ export default function RedemptionRequests() {
                 const res = await fetch(`${api.transactions.redemption}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok)
-                    throw new Error('Failed to fetch redemption requests');
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(
+                        errorData.message || 'Something Error Occured'
+                    );
+                }
                 const data: RedemptionRequest[] = await res.json();
                 setRequests(data);
             } catch (error) {
