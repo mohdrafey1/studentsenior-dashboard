@@ -98,7 +98,7 @@ export default function StorePage() {
 
     return (
         <div className="min-h-screen bg-indigo-50 dark:bg-gray-900 p-6">
-            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
+            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mt-14 mb-2">
                 Store Products
             </h1>
 
@@ -189,7 +189,17 @@ export default function StorePage() {
                                         : 'Out of Stock'}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {product.status ? 'Approved' : 'Pending'}
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-white text-xs ${
+                                            product.status
+                                                ? 'bg-green-500'
+                                                : 'bg-red-500'
+                                        }`}
+                                    >
+                                        {product.status
+                                            ? 'Approved'
+                                            : 'Pending'}
+                                    </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     {product.whatsapp && (

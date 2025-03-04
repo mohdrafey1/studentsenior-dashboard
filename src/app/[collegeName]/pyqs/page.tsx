@@ -109,7 +109,7 @@ export default function PyqPage() {
 
     return (
         <div className="min-h-screen bg-indigo-50 dark:bg-gray-900 p-6">
-            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
+            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mt-14 mb-2">
                 Previous Year Question Papers
             </h1>
 
@@ -187,6 +187,9 @@ export default function PyqPage() {
                                 Exam Type
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                                 Uploaded By
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
@@ -218,6 +221,17 @@ export default function PyqPage() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     {pyq.examType}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-white text-xs ${
+                                            pyq.status
+                                                ? 'bg-green-500'
+                                                : 'bg-red-500'
+                                        }`}
+                                    >
+                                        {pyq.status ? 'Approved' : 'Pending'}
+                                    </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     {pyq.owner.username}

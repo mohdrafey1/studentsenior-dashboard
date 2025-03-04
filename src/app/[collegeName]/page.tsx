@@ -153,7 +153,7 @@ const CollegeDataPage = () => {
                         value={data?.totalGiveOpportunity || 0}
                         previousValue={previousData?.totalGiveOpportunity || 0}
                         icon="💡"
-                        href={`${collegeName}/community`}
+                        href={`${collegeName}/opportunities`}
                     />
 
                     {/* Total Requested PYQs */}

@@ -7,15 +7,9 @@ import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
 import toast from 'react-hot-toast';
 
-interface Note {
+interface Opportunity {
     _id: string;
-    subject: {
-        _id: string;
-        subjectName: string;
-    };
-    slug: string;
-    title: string;
-    fileUrl: string;
+    name: string;
     description: string;
     owner: {
         _id: string;
@@ -23,42 +17,40 @@ interface Note {
     };
     college: string;
     status: boolean;
-    rewardPoints: number;
-    clickCounts: number;
-    isPaid: boolean;
-    price: number;
-    purchasedBy: string[];
+    whatsapp: string;
+    email: string;
+    slug: string;
     createdAt: string;
 }
 
-export default function NotesPage() {
+export default function OpportunitiesPage() {
     const params = useParams();
     const collegeName = params?.collegeName;
 
-    const [notes, setNotes] = useState<Note[]>([]);
+    const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [status, setStatus] = useState('');
-    const [isPaid, setIsPaid] = useState('');
-    const [minClickCount, setMinClickCount] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const notesPerPage = 10;
+    const opportunitiesPerPage = 10;
 
     useEffect(() => {
         if (!collegeName) return;
 
-        const fetchNotes = async () => {
+        const fetchOpportunities = async () => {
             try {
-                const res = await fetch(`${api.notes.getNotes}/${collegeName}`);
+                const res = await fetch(
+                    `${api.opportunity.getOpportunities}/${collegeName}`
+                );
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(
                         errorData.message || 'Something went wrong'
                     );
                 }
-                const jsonData: Note[] = await res.json();
-                setNotes(jsonData);
+                const jsonData: Opportunity[] = await res.json();
+                setOpportunities(jsonData);
             } catch (error) {
                 if (error instanceof Error) {
                     setError(error.message);
@@ -68,24 +60,28 @@ export default function NotesPage() {
                 setLoading(false);
             }
         };
-        fetchNotes();
+        fetchOpportunities();
     }, [collegeName]);
 
-    const filteredNotes = notes.filter(
-        (note) =>
+    const filteredOpportunities = opportunities.filter(
+        (opportunity) =>
             (searchQuery === '' ||
-                note.subject.subjectName
+                opportunity.name
                     .toLowerCase()
                     .includes(searchQuery.toLowerCase())) &&
-            (status === '' || String(note.status) === status) &&
-            (isPaid === '' || String(note.isPaid) === isPaid) &&
-            (minClickCount === '' || note.clickCounts >= Number(minClickCount))
+            (status === '' || String(opportunity.status) === status)
     );
 
-    const indexOfLastNote = currentPage * notesPerPage;
-    const indexOfFirstNote = indexOfLastNote - notesPerPage;
-    const currentNotes = filteredNotes.slice(indexOfFirstNote, indexOfLastNote);
-    const totalPages = Math.ceil(filteredNotes.length / notesPerPage);
+    const indexOfLastOpportunity = currentPage * opportunitiesPerPage;
+    const indexOfFirstOpportunity =
+        indexOfLastOpportunity - opportunitiesPerPage;
+    const currentOpportunities = filteredOpportunities.slice(
+        indexOfFirstOpportunity,
+        indexOfLastOpportunity
+    );
+    const totalPages = Math.ceil(
+        filteredOpportunities.length / opportunitiesPerPage
+    );
 
     if (loading) {
         return (
@@ -106,13 +102,13 @@ export default function NotesPage() {
     return (
         <div className="min-h-screen bg-indigo-50 dark:bg-gray-900 p-6">
             <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mt-14 mb-2">
-                Notes Collection
+                Opportunities
             </h1>
 
             <div className="mb-8 max-w-4xl mx-auto flex flex-col md:flex-row gap-4">
                 <input
                     type="text"
-                    placeholder="Search by subject name..."
+                    placeholder="Search by opportunity title..."
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -123,25 +119,9 @@ export default function NotesPage() {
                     onChange={(e) => setStatus(e.target.value)}
                 >
                     <option value="">All Status</option>
-                    <option value="true">Approved</option>
+                    <option value="true">Active</option>
                     <option value="false">Pending</option>
                 </select>
-                <select
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
-                    value={isPaid}
-                    onChange={(e) => setIsPaid(e.target.value)}
-                >
-                    <option value="">All</option>
-                    <option value="true">Paid</option>
-                    <option value="false">Free</option>
-                </select>
-                <input
-                    type="number"
-                    placeholder="Min Click Count"
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
-                    value={minClickCount}
-                    onChange={(e) => setMinClickCount(e.target.value)}
-                />
             </div>
 
             <div className="overflow-x-auto">
@@ -149,77 +129,84 @@ export default function NotesPage() {
                     <thead>
                         <tr className="bg-indigo-50 dark:bg-gray-700">
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                View
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                                 Title
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Subject
+                                Description
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                Posted By
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                Contact
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                                 Status
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Uploaded By
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Clicks
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Paid
+                                Date Posted
                             </th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentNotes.map((note) => (
+                        {currentOpportunities.map((opportunity) => (
                             <tr
-                                key={note._id}
+                                key={opportunity._id}
                                 className="hover:bg-indigo-50 dark:hover:bg-gray-700"
                             >
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     <a
-                                        href={note.fileUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                        href={`/opportunity/${opportunity.slug}`}
                                         className="text-blue-500 hover:underline"
                                     >
-                                        View
+                                        {opportunity.name}
                                     </a>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {note.title}
+                                    {opportunity.description.length > 50
+                                        ? opportunity.description.substring(
+                                              0,
+                                              50
+                                          ) + '...'
+                                        : opportunity.description}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {note.subject.subjectName}
+                                    {opportunity.owner.username}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <a
+                                        href={`mailto:${opportunity.email}`}
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        {opportunity.email}
+                                    </a>
+                                    <br />
+                                    <a
+                                        href={`https://wa.me/${opportunity.whatsapp}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-green-500 hover:underline"
+                                    >
+                                        {opportunity.whatsapp}
+                                    </a>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <span
                                         className={`px-3 py-1 rounded-full text-white text-xs ${
-                                            note.status
+                                            opportunity.status
                                                 ? 'bg-green-500'
                                                 : 'bg-red-500'
                                         }`}
                                     >
-                                        {note.status ? 'Approved' : 'Pending'}
+                                        {opportunity.status
+                                            ? 'Approved'
+                                            : 'Pending'}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {note.owner.username}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {note.clickCounts}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {note.isPaid ? (
-                                        <span className="text-red-600">
-                                            ₹{note.price / 5}
-                                        </span>
-                                    ) : (
-                                        <span className="text-green-600">
-                                            Free
-                                        </span>
-                                    )}
+                                    {new Date(
+                                        opportunity.createdAt
+                                    ).toLocaleDateString()}
                                 </td>
                             </tr>
                         ))}

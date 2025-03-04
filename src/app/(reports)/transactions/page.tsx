@@ -104,7 +104,7 @@ export default function Transactions() {
 
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
-            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
+            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400  mt-14 mb-2">
                 Transactions
             </h1>
 

@@ -81,7 +81,7 @@ export default function RedemptionRequests() {
 
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
-            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mb-8">
+            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400  mt-14 mb-2">
                 Redemption Requests
             </h1>
 
@@ -128,14 +128,18 @@ export default function RedemptionRequests() {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                     ₹ {request.rewardBalance / 5}
                                 </td>
-                                <td
-                                    className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${
-                                        request.status === 'Pending'
-                                            ? 'text-yellow-600 dark:text-yellow-400'
-                                            : 'text-green-600 dark:text-green-400'
-                                    }`}
-                                >
-                                    {request.status}
+                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-white text-xs ${
+                                            request.status
+                                                ? 'bg-green-500'
+                                                : 'bg-red-500'
+                                        }`}
+                                    >
+                                        {request.status
+                                            ? 'Approved'
+                                            : 'Pending'}
+                                    </span>
                                 </td>
 
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
