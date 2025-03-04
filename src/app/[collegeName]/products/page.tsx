@@ -38,6 +38,7 @@ export default function StorePage() {
     const [filterStatus, setFilterStatus] = useState<string>('all');
 
     useEffect(() => {
+        if (!collegeName) return;
         const fetchProducts = async () => {
             try {
                 const res = await fetch(`${api.store.products}/${collegeName}`);
@@ -59,7 +60,7 @@ export default function StorePage() {
             }
         };
         fetchProducts();
-    }, []);
+    }, [collegeName]);
 
     // Filter products based on availability and status
     const filteredProducts = products.filter((product) => {

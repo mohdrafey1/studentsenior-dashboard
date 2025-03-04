@@ -41,4 +41,12 @@ export const api = {
         affiliateProducts: `${API_BASE_URL}/dashboard/store/affiliate`,
         products: `${API_BASE_URL}/dashboard/store`,
     },
+
+    pyqs: {
+        getPyqs: `${API_BASE_URL}/dashboard/pyqs`,
+    },
+
+    notes: {
+        getNotes: `${API_BASE_URL}/dashboard/notes`,
+    },
 };
