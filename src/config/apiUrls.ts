@@ -36,4 +36,9 @@ export const api = {
         redemption: `${API_BASE_URL}/dashboard/transactions/redemption`,
         addPoint: `${API_BASE_URL}/dashboard/transactions/add-points`,
     },
+
+    store: {
+        affiliateProducts: `${API_BASE_URL}/dashboard/store/affiliate`,
+        products: `${API_BASE_URL}/dashboard/store`,
+    },
 };

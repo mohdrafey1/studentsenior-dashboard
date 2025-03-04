@@ -111,7 +111,7 @@ const Users = () => {
 
     if (error)
         return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
+            <div className="text-center text-red-500 min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
                 {error}
             </div>
         );
