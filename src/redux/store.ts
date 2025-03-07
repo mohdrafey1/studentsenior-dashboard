@@ -1,26 +1,37 @@
 import { configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
+import { combineReducers } from 'redux';
 import authReducer from './slices/authSlice';
+import collegeDataReducer from './slices/collegeDataSlice';
+import reportStatsReducer from './slices/reportStatsSlice';
 
-// Noop storage to avoid server-side errors
+// Noop storage to avoid server-side errors in SSR
 const noopStorage = {
     getItem: () => Promise.resolve(null),
     setItem: () => Promise.resolve(),
     removeItem: () => Promise.resolve(),
 };
 
+// Common storage config
 const persistConfig = {
-    key: 'auth',
+    key: 'root',
     storage: typeof window !== 'undefined' ? storage : noopStorage,
+    whitelist: ['auth', 'collegeData', 'reportStats'],
 };
 
-const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+// Combine reducers before persisting
+const rootReducer = combineReducers({
+    auth: authReducer,
+    collegeData: collegeDataReducer,
+    reportStats: reportStatsReducer,
+});
+
+// Persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: {
-        auth: persistedAuthReducer,
-    },
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false,
