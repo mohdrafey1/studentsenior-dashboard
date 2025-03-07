@@ -101,7 +101,7 @@ const CollegeDataPage = () => {
                         />
                     </div>
                 ) : (
-                    <div className="col-span-4 flex justify-center items-center py-10 w-full bg-white dark:bg-gray-700">
+                    <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
                         {loading ? (
                             <Spinner size={2} />
                         ) : (
