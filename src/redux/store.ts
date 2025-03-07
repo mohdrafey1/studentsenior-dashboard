@@ -8,6 +8,9 @@ import reportStatsReducer from './slices/reportStatsSlice';
 import collegesReducer from './slices/collegesSlice';
 import addPointsReducer from './slices/addPointSlice';
 import redemptionReducer from './slices/redemptionSlice';
+import transactionsReducer from './slices/transactionsSlice';
+import usersReducer from './slices/usersSlice';
+import dashboardUsersReducer from './slices/dashboardUsersSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -27,6 +30,8 @@ const persistConfig = {
         'colleges',
         'addPoints',
         'redemption',
+        'users',
+        'dashboardUsers',
     ],
 };
 
@@ -38,6 +43,9 @@ const rootReducer = combineReducers({
     colleges: collegesReducer,
     addPoints: addPointsReducer,
     redemption: redemptionReducer,
+    transactions: transactionsReducer,
+    users: usersReducer,
+    dashboardUsers: dashboardUsersReducer,
 });
 
 // Persisted reducer

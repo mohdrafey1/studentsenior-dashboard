@@ -1,11 +1,12 @@
 'use client';
 
-import { api } from '@/config/apiUrls';
 import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
 import { getDateRange } from '@/utils/dateUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchdashboardUsers } from '@/redux/slices/dashboardUsersSlice';
 
 interface User {
     _id: string;
@@ -17,50 +18,23 @@ interface User {
 }
 
 const DashboardUser = () => {
-    const [data, setData] = useState<User[]>([]);
     const [filteredData, setFilteredData] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     const [searchEmail, setSearchEmail] = useState('');
     const [dateFilter, setDateFilter] = useState<string>('');
 
-    const token =
-        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { dashboardUsers, loading, error } = useSelector(
+        (state: RootState) => state.dashboardUsers
+    );
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(`${api.user.allDashboardUser}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(
-                        errorData.message || 'Something Error Occured'
-                    );
-                }
-
-                const jsonData: User[] = await res.json();
-
-                setData(jsonData);
-                setFilteredData(jsonData);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                    toast.error(error.message);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [token]);
+        dispatch(fetchdashboardUsers());
+    }, [dispatch]);
 
     useEffect(() => {
-        let filtered = data;
+        let filtered = dashboardUsers;
 
         if (searchEmail) {
             filtered = filtered.filter((user) =>
@@ -81,7 +55,7 @@ const DashboardUser = () => {
         }
 
         setFilteredData(filtered);
-    }, [searchEmail, dateFilter, data]);
+    }, [searchEmail, dateFilter, dashboardUsers]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const DashboardUserPerPage = 12;
@@ -92,20 +66,6 @@ const DashboardUser = () => {
         indexOfLastUser
     );
     const totalPages = Math.ceil(filteredData.length / DashboardUserPerPage);
-
-    if (loading)
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-700">
-                <Spinner size={3} />
-            </div>
-        );
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
 
     return (
         <main className="min-h-screen bg-indigo-50 dark:bg-gray-900 p-6">
@@ -139,9 +99,9 @@ const DashboardUser = () => {
                 </div>
 
                 {/* DashboardUser List */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {currentDashboardUser.length > 0 ? (
-                        currentDashboardUser.map((user) => (
+                {currentDashboardUser.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {currentDashboardUser.map((user) => (
                             <div
                                 key={user._id}
                                 className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
@@ -184,13 +144,21 @@ const DashboardUser = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-                        <p className="text-center text-gray-500 dark:text-gray-300 col-span-full">
-                            No DashboardUser found.
-                        </p>
-                    )}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                        {loading ? (
+                            <Spinner size={2} />
+                        ) : (
+                            <div className="text-center p-4  rounded-lg shadow-3xl">
+                                <p className="text-xl font-semibold text-red-500 text-center">
+                                    {error}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Pagination */}
                 <Pagination

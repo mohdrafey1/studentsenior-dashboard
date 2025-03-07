@@ -1,63 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '@/config/apiUrls';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
-import toast from 'react-hot-toast';
-
-interface Transaction {
-    _id: string;
-    user: {
-        _id: string;
-        username: string;
-        email: string;
-    };
-    type: string;
-    points: number;
-    resourceType: string;
-    resourceId: string;
-    createdAt: string;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchTransactions } from '@/redux/slices/transactionsSlice';
 
 export default function Transactions() {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterType, setFilterType] = useState('');
     const [filterResourceType, setFilterResourceType] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const transactionsPerPage = 12;
 
-    const token =
-        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { transactions, loading, error } = useSelector(
+        (state: RootState) => state.transactions
+    );
 
     useEffect(() => {
-        const fetchTransactions = async () => {
-            try {
-                const res = await fetch(`${api.transactions.transaction}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(
-                        errorData.message || 'Something Error Occured'
-                    );
-                }
-                const data: Transaction[] = await res.json();
-                setTransactions(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                    toast.error(error.message);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchTransactions();
-    }, [token]);
+        dispatch(fetchTransactions());
+    }, [dispatch]);
 
     // Filter transactions
     const filteredTransactions = transactions.filter(
@@ -86,21 +51,6 @@ export default function Transactions() {
     const totalPages = Math.ceil(
         filteredTransactions.length / transactionsPerPage
     );
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
-                <Spinner size={3} />
-            </div>
-        );
-    }
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
 
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
@@ -145,71 +95,83 @@ export default function Transactions() {
                 </select>
             </div>
 
-            {/* Transaction Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                    <thead>
-                        <tr className="bg-indigo-50 dark:bg-gray-700">
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Email
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Type
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Points
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Resource Type
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Resource ID
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Created At
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentTransactions.map((transaction) => (
-                            <tr
-                                key={transaction._id}
-                                className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {transaction.user?.email}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {transaction.type}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {transaction.points}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {transaction.resourceType}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {transaction.resourceId}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {new Date(
-                                        transaction.createdAt
-                                    ).toLocaleDateString()}
-                                </td>
+            {currentTransactions.length ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <thead>
+                            <tr className="bg-indigo-50 dark:bg-gray-700">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Email
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Type
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Points
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Resource Type
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Resource ID
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Created At
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Pagination */}
-            <div className="mt-8 flex justify-center">
-                <Pagination
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                            {currentTransactions.map((transaction) => (
+                                <tr
+                                    key={transaction._id}
+                                    className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {transaction.user?.email}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {transaction.type}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {transaction.points}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {transaction.resourceType}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {transaction.resourceId}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {new Date(
+                                            transaction.createdAt
+                                        ).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {/* Pagination */}
+                    <div className="mt-8 flex justify-center">
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            onPageChange={setCurrentPage}
+                        />
+                    </div>
+                </div>
+            ) : (
+                <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                    {loading ? (
+                        <Spinner size={2} />
+                    ) : (
+                        <div className="text-center p-4  rounded-lg shadow-3xl">
+                            <p className="text-xl font-semibold text-red-500 text-center">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

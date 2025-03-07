@@ -1,12 +1,13 @@
 'use client';
 
-import { api } from '@/config/apiUrls';
 import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
 import { getDateRange } from '@/utils/dateUtils';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchUsers } from '@/redux/slices/usersSlice';
 
 interface User {
     _id: string;
@@ -22,51 +23,23 @@ interface User {
 }
 
 const Users = () => {
-    const [data, setData] = useState<User[]>([]);
     const [filteredData, setFilteredData] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
     const [searchEmail, setSearchEmail] = useState('');
     const [minPoints, setMinPoints] = useState<number | null>(null);
     const [dateFilter, setDateFilter] = useState<string>('');
 
-    const token =
-        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { users, loading, error } = useSelector(
+        (state: RootState) => state.users
+    );
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(`${api.user.allUser}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(
-                        errorData.message || 'Something Error Occured'
-                    );
-                }
-
-                const jsonData: User[] = await res.json();
-
-                setData(jsonData);
-                setFilteredData(jsonData);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                    toast.error(error.message);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [token]);
+        dispatch(fetchUsers());
+    }, [dispatch]);
 
     useEffect(() => {
-        let filtered = data;
+        let filtered = users;
 
         if (searchEmail) {
             filtered = filtered.filter((user) =>
@@ -93,7 +66,7 @@ const Users = () => {
         }
 
         setFilteredData(filtered);
-    }, [searchEmail, minPoints, dateFilter, data]);
+    }, [searchEmail, minPoints, dateFilter, users]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 12;
@@ -101,20 +74,6 @@ const Users = () => {
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredData.length / usersPerPage);
-
-    if (loading)
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-700">
-                <Spinner size={3} />
-            </div>
-        );
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
-                {error}
-            </div>
-        );
 
     return (
         <main className="min-h-screen bg-indigo-50 dark:bg-gray-900 p-6">
@@ -160,9 +119,9 @@ const Users = () => {
                 </div>
 
                 {/* Users List */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {currentUsers.length > 0 ? (
-                        currentUsers.map((user) => (
+                {currentUsers.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {currentUsers.map((user) => (
                             <div
                                 key={user._id}
                                 className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
@@ -237,14 +196,21 @@ const Users = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-                        <p className="text-center text-gray-500 dark:text-gray-300 col-span-full">
-                            No users found.
-                        </p>
-                    )}
-                </div>
-
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                        {loading ? (
+                            <Spinner size={2} />
+                        ) : (
+                            <div className="text-center p-4  rounded-lg shadow-3xl">
+                                <p className="text-xl font-semibold text-red-500 text-center">
+                                    {error}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
                 {/* Pagination */}
                 <Pagination
                     totalPages={totalPages}

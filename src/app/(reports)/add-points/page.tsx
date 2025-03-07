@@ -7,19 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { fetchAddPointsRequests } from '@/redux/slices/addPointSlice';
 
-interface AddPointRequest {
-    _id: string;
-    owner: {
-        _id: string;
-        username: string;
-        email: string;
-    };
-    pointsAdded: number;
-    rupees: number;
-    status: boolean;
-    createdAt: string;
-}
-
 export default function AddPoints() {
     const [currentPage, setCurrentPage] = useState(1);
     const requestsPerPage = 10;
@@ -48,12 +35,6 @@ export default function AddPoints() {
             <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400  mt-14 mb-2">
                 Add Points Requests
             </h1>
-
-            {error && (
-                <div className="text-red-500 text-center">
-                    Failed to load Add Points Request: {error}
-                </div>
-            )}
 
             {/* Requests Table */}
             {requests.length > 0 ? (
@@ -135,8 +116,8 @@ export default function AddPoints() {
                         <Spinner size={2} />
                     ) : (
                         <div className="text-center p-4  rounded-lg shadow-3xl">
-                            <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">
-                                No Request Found
+                            <p className="text-xl font-semibold text-red-500 text-center">
+                                {error}
                             </p>
                         </div>
                     )}

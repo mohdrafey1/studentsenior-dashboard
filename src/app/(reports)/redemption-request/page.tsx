@@ -35,12 +35,6 @@ export default function RedemptionRequests() {
                 Redemption Requests
             </h1>
 
-            {error && (
-                <div className="text-red-500 text-center">
-                    Failed to load Redemption Request: {error}
-                </div>
-            )}
-
             {/* Requests Table */}
             {requests.length > 0 ? (
                 <div className="overflow-x-auto">
@@ -121,8 +115,8 @@ export default function RedemptionRequests() {
                         <Spinner size={2} />
                     ) : (
                         <div className="text-center p-4 rounded-lg shadow-3xl">
-                            <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">
-                                No Redemption Request Found
+                            <p className="text-xl font-semibold text-red-500 text-center">
+                                {error}
                             </p>
                         </div>
                     )}
