@@ -6,6 +6,8 @@ import authReducer from './slices/authSlice';
 import collegeDataReducer from './slices/collegeDataSlice';
 import reportStatsReducer from './slices/reportStatsSlice';
 import collegesReducer from './slices/collegesSlice';
+import addPointsReducer from './slices/addPointSlice';
+import redemptionReducer from './slices/redemptionSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -18,7 +20,14 @@ const noopStorage = {
 const persistConfig = {
     key: 'root',
     storage: typeof window !== 'undefined' ? storage : noopStorage,
-    whitelist: ['auth', 'collegeData', 'reportStats', 'colleges'],
+    whitelist: [
+        'auth',
+        'collegeData',
+        'reportStats',
+        'colleges',
+        'addPoints',
+        'redemption',
+    ],
 };
 
 // Combine reducers before persisting
@@ -27,6 +36,8 @@ const rootReducer = combineReducers({
     collegeData: collegeDataReducer,
     reportStats: reportStatsReducer,
     colleges: collegesReducer,
+    addPoints: addPointsReducer,
+    redemption: redemptionReducer,
 });
 
 // Persisted reducer

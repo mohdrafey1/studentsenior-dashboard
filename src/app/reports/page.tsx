@@ -23,6 +23,13 @@ const ReportPage = () => {
                 <h1 className="text-3xl text-center font-bold mb-8 text-indigo-500 dark:text-indigo-400">
                     Report Stats
                 </h1>
+
+                {error && (
+                    <div className="text-red-500 text-center">
+                        Failed to load Stats: {error}
+                    </div>
+                )}
+
                 {currentData !== null ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {/* Total Add Points */}
@@ -121,7 +128,7 @@ const ReportPage = () => {
                         ) : (
                             <div className="text-center p-4  rounded-lg shadow-3xl">
                                 <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">
-                                    {error}
+                                    No Stats Found
                                 </p>
                             </div>
                         )}

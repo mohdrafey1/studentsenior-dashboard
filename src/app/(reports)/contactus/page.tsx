@@ -116,7 +116,7 @@ export default function ContactUs() {
                                 className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
                             >
                                 {/* Subject with Read More */}
-                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-24">
+                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
                                     {expanded[request._id]?.subject ? (
                                         <>
                                             {request.subject}

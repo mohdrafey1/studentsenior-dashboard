@@ -1,59 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '@/config/apiUrls';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchRedemptionRequests } from '@/redux/slices/redemptionSlice';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
-import toast from 'react-hot-toast';
-
-interface RedemptionRequest {
-    _id: string;
-    upiId: string;
-    rewardBalance: number;
-    status: string;
-    owner: {
-        _id: string;
-        username: string;
-        email: string;
-    };
-    createdAt: string;
-}
 
 export default function RedemptionRequests() {
-    const [requests, setRequests] = useState<RedemptionRequest[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const requestsPerPage = 10;
 
-    const token =
-        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const dispatch = useDispatch<AppDispatch>();
+    const { requests, loading, error } = useSelector(
+        (state: RootState) => state.redemption
+    );
 
     useEffect(() => {
-        const fetchRequests = async () => {
-            try {
-                const res = await fetch(`${api.transactions.redemption}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(
-                        errorData.message || 'Something Error Occured'
-                    );
-                }
-                const data: RedemptionRequest[] = await res.json();
-                setRequests(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                    toast.error(error.message);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchRequests();
-    }, [token]);
+        dispatch(fetchRedemptionRequests());
+    }, [dispatch]);
 
     // Pagination logic
     const indexOfLastRequest = currentPage * requestsPerPage;
@@ -64,103 +29,105 @@ export default function RedemptionRequests() {
     );
     const totalPages = Math.ceil(requests.length / requestsPerPage);
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
-                <Spinner size={3} />
-            </div>
-        );
-    }
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
-
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
-            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400  mt-14 mb-2">
+            <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400 mt-14 mb-2">
                 Redemption Requests
             </h1>
 
+            {error && (
+                <div className="text-red-500 text-center">
+                    Failed to load Redemption Request: {error}
+                </div>
+            )}
+
             {/* Requests Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                    <thead>
-                        <tr className="bg-indigo-50 dark:bg-gray-700">
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Username
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Email
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                UPI ID
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Amount
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Status
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Created At
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentRequests.map((request) => (
-                            <tr
-                                key={request._id}
-                                className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {request.owner.username}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {request.owner.email}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {request.upiId}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    ₹ {request.rewardBalance / 5}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-white text-xs ${
-                                            request.status
-                                                ? 'bg-green-500'
-                                                : 'bg-red-500'
-                                        }`}
-                                    >
-                                        {request.status
-                                            ? 'Approved'
-                                            : 'Pending'}
-                                    </span>
-                                </td>
-
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {new Date(
-                                        request.createdAt
-                                    ).toLocaleDateString()}
-                                </td>
+            {requests.length > 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <thead>
+                            <tr className="bg-indigo-50 dark:bg-gray-700">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Username
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Email
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    UPI ID
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Amount
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                    Created At
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Pagination */}
-            <div className="mt-8 flex justify-center">
-                <Pagination
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                            {currentRequests.map((request) => (
+                                <tr
+                                    key={request._id}
+                                    className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {request.owner.username}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {request.owner.email}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {request.upiId}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        ₹ {request.rewardBalance / 5}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-white text-xs ${
+                                                request.status
+                                                    ? 'bg-green-500'
+                                                    : 'bg-red-500'
+                                            }`}
+                                        >
+                                            {request.status
+                                                ? 'Approved'
+                                                : 'Pending'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {new Date(
+                                            request.createdAt
+                                        ).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div className="mt-4 flex justify-center">
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            onPageChange={setCurrentPage}
+                        />
+                    </div>
+                </div>
+            ) : (
+                <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                    {loading ? (
+                        <Spinner size={2} />
+                    ) : (
+                        <div className="text-center p-4 rounded-lg shadow-3xl">
+                            <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">
+                                No Redemption Request Found
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
