@@ -8,9 +8,11 @@ import DeleteConfirmationModal from '@/components/ui/DeleteConfirmationModal';
 import EditCollegeModal from '@/components/College/EditCollegeModal';
 import toast from 'react-hot-toast';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/slices/authSlice';
 import { checkTokenExpiration } from '@/redux/slices/authSlice';
+import { fetchColleges } from '@/redux/slices/collegesSlice';
+import { AppDispatch, RootState } from '@/redux/store';
 
 interface College {
     _id: string;
@@ -22,16 +24,13 @@ interface College {
 }
 
 const Home = () => {
-    const [colleges, setColleges] = useState<College[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [showInactive, setShowInactive] = useState(false);
     const [editingCollege, setEditingCollege] = useState<College | null>(null);
     const [collegeToDelete, setCollegeToDelete] = useState<College | null>(
         null
     );
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         if (!checkTokenExpiration()) {
@@ -42,27 +41,16 @@ const Home = () => {
     const token =
         typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-    const fetchColleges = async () => {
-        try {
-            const res = await fetch(`${api.college.getColleges}`);
-            if (!res.ok) throw new Error('Failed to fetch colleges');
-            const data = await res.json();
-            setColleges(data);
-        } catch (error) {
-            console.error('Error fetching colleges:', error);
-            setError('Something went wrong while fetching colleges.');
-            toast.error('Error fetching colleges.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { colleges, loading, error } = useSelector(
+        (state: RootState) => state.colleges
+    );
 
     useEffect(() => {
-        if (colleges.length === 0) fetchColleges();
-    }, [colleges.length]);
+        dispatch(fetchColleges());
+    }, [dispatch]);
 
     const handleDelete = async () => {
-        if (!collegeToDelete || !token) return;
+        if (!collegeToDelete) return;
 
         try {
             const res = await fetch(
@@ -74,13 +62,9 @@ const Home = () => {
             );
 
             if (res.ok) {
-                setColleges(
-                    colleges.filter(
-                        (college) => college._id !== collegeToDelete._id
-                    )
-                );
                 toast.success('College deleted successfully!');
                 setCollegeToDelete(null);
+                dispatch(fetchColleges());
             } else {
                 toast.error(
                     'Access Denied, You are not allowed to do this operation'
@@ -93,11 +77,11 @@ const Home = () => {
     };
 
     const handleSaveCollege = async (updatedCollege: College) => {
-        if (!token) return;
+        // if (!collegeToDelete || !token) return;
 
         try {
             const res = await fetch(
-                `${api.college.deleteCollege}/${updatedCollege._id}`,
+                `${api.college.editCollege}/${updatedCollege._id}`,
                 {
                     method: 'PUT',
                     headers: {
@@ -109,15 +93,9 @@ const Home = () => {
             );
 
             if (res.ok) {
-                setColleges(
-                    colleges.map((college) =>
-                        college._id === updatedCollege._id
-                            ? updatedCollege
-                            : college
-                    )
-                );
                 toast.success('College updated successfully!');
                 setEditingCollege(null);
+                dispatch(fetchColleges());
             } else {
                 toast.error(
                     'Access Denied, You are not allowed to do this operation'
@@ -128,21 +106,6 @@ const Home = () => {
             toast.error('Error updating college');
         }
     };
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-700">
-                <Spinner size={3} />
-            </div>
-        );
-    }
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
 
     const filteredColleges = showInactive
         ? colleges
@@ -173,32 +136,46 @@ const Home = () => {
             </div>
 
             {/* College Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredColleges.map((college) => (
-                    <div key={college._id} className="relative">
-                        {/* College Card */}
-                        <CollegeCard college={college} />
+            {colleges.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredColleges.map((college) => (
+                        <div key={college._id} className="relative">
+                            {/* College Card */}
+                            <CollegeCard college={college} />
 
-                        {/* Edit and Delete Buttons */}
-                        <div className="absolute bottom-4 right-4 flex gap-2">
-                            <button
-                                onClick={() => setEditingCollege(college)}
-                                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
-                                aria-label="Edit College"
-                            >
-                                <FaEdit className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setCollegeToDelete(college)}
-                                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors"
-                                aria-label="Delete College"
-                            >
-                                <FaTrash className="w-5 h-5" />
-                            </button>
+                            {/* Edit and Delete Buttons */}
+                            <div className="absolute bottom-4 right-4 flex gap-2">
+                                <button
+                                    onClick={() => setEditingCollege(college)}
+                                    className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+                                    aria-label="Edit College"
+                                >
+                                    <FaEdit className="w-5 h-5" />
+                                </button>
+                                <button
+                                    onClick={() => setCollegeToDelete(college)}
+                                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors"
+                                    aria-label="Delete College"
+                                >
+                                    <FaTrash className="w-5 h-5" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="col-span-4 flex justify-center items-center py-10 w-full bg-white dark:bg-gray-700">
+                    {loading ? (
+                        <Spinner size={2} />
+                    ) : (
+                        <div className="text-center p-4  rounded-lg shadow-3xl">
+                            <p className="text-xl font-semibold text-gray-700 dark:text-gray-200">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Delete Confirmation Modal */}
             {collegeToDelete && (
