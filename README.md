@@ -7,7 +7,7 @@ The Student Senior Dashboard is an administrative interface designed to manage a
 ## Description
 Student Senior is a dynamic platform that connects college students for mentorship, guidance, and community building. The website allows students to ask questions, share knowledge, and trade items within the same college. Senior students can register to mentor juniors of their college , creating a collaborative ecosystem of knowledge sharing. The platform also offers academic resources, including notes and past exam papers.
 
-## You can view the live demo at studentsenior.com.
+## You can view the live demo at [studentsenior.com](https://studentsenior.com).
 
 ## Features
 All resources are based on college:
