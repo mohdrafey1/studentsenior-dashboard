@@ -101,13 +101,6 @@ export default function RedemptionRequests() {
                             ))}
                         </tbody>
                     </table>
-                    <div className="mt-4 flex justify-center">
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
                 </div>
             ) : (
                 <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
@@ -122,6 +115,13 @@ export default function RedemptionRequests() {
                     )}
                 </div>
             )}
+            <div className="flex justify-center">
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
         </div>
     );
 }

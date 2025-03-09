@@ -157,7 +157,7 @@ export default function Courses() {
             </div>
 
             {/* Pagination */}
-            <div className="mt-8 flex justify-center">
+            <div className="flex justify-center">
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}

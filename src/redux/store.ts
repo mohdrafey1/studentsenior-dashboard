@@ -32,6 +32,7 @@ const persistConfig = {
         'redemption',
         'users',
         'dashboardUsers',
+        'transactions',
     ],
 };
 

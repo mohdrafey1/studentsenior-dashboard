@@ -150,14 +150,6 @@ export default function Transactions() {
                             ))}
                         </tbody>
                     </table>
-                    {/* Pagination */}
-                    <div className="mt-8 flex justify-center">
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
                 </div>
             ) : (
                 <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
@@ -172,6 +164,14 @@ export default function Transactions() {
                     )}
                 </div>
             )}
+            {/* Pagination */}
+            <div className=" flex justify-center">
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
         </div>
     );
 }
