@@ -69,150 +69,154 @@ export default function ContactUs() {
         }));
     };
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
-                <Spinner size={3} />
-            </div>
-        );
-    }
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
-
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
             <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-400  mt-14 mb-2">
                 Contact Us Requests
             </h1>
 
-            {/* Requests Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                    <thead>
-                        <tr className="bg-indigo-50 dark:bg-gray-700">
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Subject
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Description
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Email
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Created At
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentRequests.map((request) => (
-                            <tr
-                                key={request._id}
-                                className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                            >
-                                {/* Subject with Read More */}
-                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
-                                    {expanded[request._id]?.subject ? (
-                                        <>
-                                            {request.subject}
-                                            <button
-                                                onClick={() =>
-                                                    toggleExpand(
-                                                        request._id,
-                                                        'subject'
-                                                    )
-                                                }
-                                                className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
-                                            >
-                                                Read Less
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {request.subject.length > 15
-                                                ? `${request.subject.substring(
-                                                      0,
-                                                      15
-                                                  )}...`
-                                                : request.subject}
-                                            {request.subject.length > 15 && (
-                                                <button
-                                                    onClick={() =>
-                                                        toggleExpand(
-                                                            request._id,
-                                                            'subject'
-                                                        )
-                                                    }
-                                                    className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
-                                                >
-                                                    Read More
-                                                </button>
+            {requests.length > 0 ? (
+                <>
+                    {/* Requests Table */}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                            <thead>
+                                <tr className="bg-indigo-50 dark:bg-gray-700">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Subject
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Description
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Email
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Created At
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                {currentRequests.map((request) => (
+                                    <tr
+                                        key={request._id}
+                                        className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                    >
+                                        {/* Subject with Read More */}
+                                        <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
+                                            {expanded[request._id]?.subject ? (
+                                                <>
+                                                    {request.subject}
+                                                    <button
+                                                        onClick={() =>
+                                                            toggleExpand(
+                                                                request._id,
+                                                                'subject'
+                                                            )
+                                                        }
+                                                        className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                                    >
+                                                        Read Less
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {request.subject.length > 15
+                                                        ? `${request.subject.substring(
+                                                              0,
+                                                              15
+                                                          )}...`
+                                                        : request.subject}
+                                                    {request.subject.length >
+                                                        15 && (
+                                                        <button
+                                                            onClick={() =>
+                                                                toggleExpand(
+                                                                    request._id,
+                                                                    'subject'
+                                                                )
+                                                            }
+                                                            className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                                        >
+                                                            Read More
+                                                        </button>
+                                                    )}
+                                                </>
                                             )}
-                                        </>
-                                    )}
-                                </td>
+                                        </td>
 
-                                {/* Description with Read More */}
-                                <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
-                                    {expanded[request._id]?.description ? (
-                                        <>
-                                            {request.description}
-                                            <button
-                                                onClick={() =>
-                                                    toggleExpand(
-                                                        request._id,
-                                                        'description'
-                                                    )
-                                                }
-                                                className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
-                                            >
-                                                Read Less
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {request.description.length > 50
-                                                ? `${request.description.substring(
-                                                      0,
-                                                      50
-                                                  )}...`
-                                                : request.description}
-                                            {request.description.length >
-                                                50 && (
-                                                <button
-                                                    onClick={() =>
-                                                        toggleExpand(
-                                                            request._id,
-                                                            'description'
-                                                        )
-                                                    }
-                                                    className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
-                                                >
-                                                    Read More
-                                                </button>
+                                        {/* Description with Read More */}
+                                        <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs">
+                                            {expanded[request._id]
+                                                ?.description ? (
+                                                <>
+                                                    {request.description}
+                                                    <button
+                                                        onClick={() =>
+                                                            toggleExpand(
+                                                                request._id,
+                                                                'description'
+                                                            )
+                                                        }
+                                                        className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                                    >
+                                                        Read Less
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {request.description
+                                                        .length > 50
+                                                        ? `${request.description.substring(
+                                                              0,
+                                                              50
+                                                          )}...`
+                                                        : request.description}
+                                                    {request.description
+                                                        .length > 50 && (
+                                                        <button
+                                                            onClick={() =>
+                                                                toggleExpand(
+                                                                    request._id,
+                                                                    'description'
+                                                                )
+                                                            }
+                                                            className="text-indigo-600 dark:text-indigo-400 font-medium ml-2"
+                                                        >
+                                                            Read More
+                                                        </button>
+                                                    )}
+                                                </>
                                             )}
-                                        </>
-                                    )}
-                                </td>
+                                        </td>
 
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {request.email}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {new Date(
-                                        request.createdAt
-                                    ).toLocaleDateString()}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {request.email}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {new Date(
+                                                request.createdAt
+                                            ).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            ) : (
+                <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                    {loading ? (
+                        <Spinner size={2} />
+                    ) : (
+                        <div className="text-center p-4  rounded-lg shadow-3xl">
+                            <p className="text-xl font-semibold text-red-500 text-center">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Pagination */}
             <div className="flex justify-center">

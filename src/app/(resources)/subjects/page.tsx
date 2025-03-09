@@ -1,53 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '@/config/apiUrls';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
-import toast from 'react-hot-toast';
-
-interface Subject {
-    _id: string;
-    subjectName: string;
-    subjectCode: string;
-    semester: number;
-    branch: {
-        _id: string;
-        branchName: string;
-        branchCode: string;
-    };
-    totalNotes: number;
-    totalPyqs: number;
-    clickCounts: number;
-    createdAt: string;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchSubjects } from '@/redux/slices/subjectSlice';
 
 export default function Subjects() {
-    const [subjects, setSubjects] = useState<Subject[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [branchFilter, setBranchFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
 
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { subjects, loading, error } = useSelector(
+        (state: RootState) => state.subjects
+    );
+
     useEffect(() => {
-        const fetchSubjects = async () => {
-            try {
-                const res = await fetch(`${api.resource.subjects}`);
-                if (!res.ok) throw new Error('Failed to fetch subjects');
-                const data: Subject[] = await res.json();
-                setSubjects(data);
-            } catch (error) {
-                console.error('Error fetching subjects:', error);
-                setError('Something went wrong while fetching subjects');
-                toast.error('Something went wrong while fetching subjects');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSubjects();
-    }, []);
+        dispatch(fetchSubjects());
+    }, [dispatch]);
 
     // Filter subjects based on search query and branch filter
     const filteredSubjects = subjects.filter((subject) => {
@@ -79,21 +53,6 @@ export default function Subjects() {
         new Set(subjects.map((subject) => subject.branch?.branchName))
     );
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-700">
-                <Spinner size={3} />
-            </div>
-        );
-    }
-
-    if (error)
-        return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
-                {error}
-            </div>
-        );
-
     return (
         <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
             <h1 className="text-3xl font-bold text-center text-indigo-400 mt-14 mb-2">
@@ -115,86 +74,102 @@ export default function Subjects() {
                     className="w-full sm:w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
                 >
                     <option value="">Filter by Branch</option>
-                    {uniqueBranches.map((branchName) => (
-                        <option key={branchName} value={branchName}>
+                    {uniqueBranches.map((branchName, index) => (
+                        <option key={index} value={branchName}>
                             {branchName}
                         </option>
                     ))}
                 </select>
             </div>
 
-            {/* Subject Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                    <thead>
-                        <tr className="bg-indigo-50 dark:bg-gray-700">
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Subject Name
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Subject Code
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Semester
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Branch
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Notes
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                PYQs
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Clicks
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                                Created At
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentSubjects.map((subject) => (
-                            <tr
-                                key={subject._id}
-                                className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.subjectName}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.subjectCode}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.semester}
-                                </td>
-                                <td
-                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"
-                                    title={subject.branch?.branchName}
-                                >
-                                    {subject.branch?.branchCode}
-                                </td>
+            {subjects.length > 0 ? (
+                <>
+                    {/* Subject Table */}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                            <thead>
+                                <tr className="bg-indigo-50 dark:bg-gray-700">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Subject Name
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Subject Code
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Semester
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Branch
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Notes
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        PYQs
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Clicks
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        Created At
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                {currentSubjects.map((subject) => (
+                                    <tr
+                                        key={subject._id}
+                                        className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.subjectName}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.subjectCode}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.semester}
+                                        </td>
+                                        <td
+                                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"
+                                            title={subject.branch?.branchName}
+                                        >
+                                            {subject.branch?.branchCode}
+                                        </td>
 
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.totalNotes}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.totalPyqs}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {subject.clickCounts}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {new Date(
-                                        subject.createdAt
-                                    ).toLocaleDateString()}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.totalNotes}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.totalPyqs}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {subject.clickCounts}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                            {new Date(
+                                                subject.createdAt
+                                            ).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            ) : (
+                <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
+                    {loading ? (
+                        <Spinner size={2} />
+                    ) : (
+                        <div className="text-center p-4  rounded-lg shadow-3xl">
+                            <p className="text-xl font-semibold text-red-500 text-center">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Pagination */}
             <div className="flex justify-center">

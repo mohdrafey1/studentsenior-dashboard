@@ -11,6 +11,7 @@ import redemptionReducer from './slices/redemptionSlice';
 import transactionsReducer from './slices/transactionsSlice';
 import usersReducer from './slices/usersSlice';
 import dashboardUsersReducer from './slices/dashboardUsersSlice';
+import subjectReducer from './slices/subjectSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -33,6 +34,7 @@ const persistConfig = {
         'users',
         'dashboardUsers',
         'transactions',
+        'subjects',
     ],
 };
 
@@ -47,6 +49,7 @@ const rootReducer = combineReducers({
     transactions: transactionsReducer,
     users: usersReducer,
     dashboardUsers: dashboardUsersReducer,
+    subjects: subjectReducer,
 });
 
 // Persisted reducer
