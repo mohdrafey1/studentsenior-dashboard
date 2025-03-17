@@ -1,17 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
-import { combineReducers } from 'redux';
-import authReducer from './slices/authSlice';
-import collegeDataReducer from './slices/collegeDataSlice';
-import reportStatsReducer from './slices/reportStatsSlice';
-import collegesReducer from './slices/collegesSlice';
-import addPointsReducer from './slices/addPointSlice';
-import redemptionReducer from './slices/redemptionSlice';
-import transactionsReducer from './slices/transactionsSlice';
-import usersReducer from './slices/usersSlice';
-import dashboardUsersReducer from './slices/dashboardUsersSlice';
-import subjectReducer from './slices/subjectSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
+import { combineReducers } from "redux";
+import authReducer from "./slices/authSlice";
+import collegeDataReducer from "./slices/collegeDataSlice";
+import reportStatsReducer from "./slices/reportStatsSlice";
+import collegesReducer from "./slices/collegesSlice";
+import addPointsReducer from "./slices/addPointSlice";
+import redemptionReducer from "./slices/redemptionSlice";
+import transactionsReducer from "./slices/transactionsSlice";
+import usersReducer from "./slices/usersSlice";
+import dashboardUsersReducer from "./slices/dashboardUsersSlice";
+import subjectReducer from "./slices/subjectSlice";
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -22,20 +22,9 @@ const noopStorage = {
 
 // Common storage config
 const persistConfig = {
-    key: 'root',
-    storage: typeof window !== 'undefined' ? storage : noopStorage,
-    whitelist: [
-        'auth',
-        'collegeData',
-        'reportStats',
-        'colleges',
-        'addPoints',
-        'redemption',
-        'users',
-        'dashboardUsers',
-        'transactions',
-        'subjects',
-    ],
+    key: "root",
+    storage: typeof window !== "undefined" ? storage : noopStorage,
+    whitelist: ["auth", "colleges"],
 };
 
 // Combine reducers before persisting
