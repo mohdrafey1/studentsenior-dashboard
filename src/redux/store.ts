@@ -24,7 +24,18 @@ const noopStorage = {
 const persistConfig = {
     key: "root",
     storage: typeof window !== "undefined" ? storage : noopStorage,
-    whitelist: ["auth", "colleges"],
+    whitelist: [
+        "auth",
+        "collegeData",
+        "reportStats",
+        "colleges",
+        "addPoints",
+        "redemption",
+        "users",
+        "dashboardUsers",
+        "transactions",
+        "subjects",
+    ],
 };
 
 // Combine reducers before persisting
