@@ -30,12 +30,12 @@ const persistConfig = {
         'collegeData',
         'reportStats',
         'colleges',
-        'addPoints',
+
         'redemption',
         'users',
         'dashboardUsers',
         'transactions',
-        'subjects',
+
         'paymentList',
     ],
 };

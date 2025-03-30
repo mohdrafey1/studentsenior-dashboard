@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { api } from '@/config/apiUrls';
 import { Spinner } from '@/components/ui/Spinner';
 import Pagination from '@/components/ui/Pagination';
@@ -31,11 +31,7 @@ export default function ContactUs() {
     const token =
         typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-    useEffect(() => {
-        fetchRequests();
-    }, [token]);
-
-    const fetchRequests = async () => {
+    const fetchRequests = useCallback(async () => {
         try {
             setLoading(true);
             const res = await fetch(`${api.report.contactus}`, {
@@ -57,7 +53,11 @@ export default function ContactUs() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]);
+
+    useEffect(() => {
+        fetchRequests();
+    }, [fetchRequests]);
 
     const handleDelete = async () => {
         if (!requestToDelete) return;
@@ -77,7 +77,7 @@ export default function ContactUs() {
             }
 
             toast.success('Contact request deleted successfully');
-            fetchRequests(); // Refresh the list
+            fetchRequests();
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message);

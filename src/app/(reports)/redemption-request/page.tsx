@@ -45,8 +45,8 @@ export default function RedemptionRequests() {
             if (!response.ok) {
                 throw new Error('Failed to update status');
             }
-            const data: any = response.json();
-            toast.success(data.message || 'Request Updated Successfully');
+
+            toast.success('Request Updated Successfully');
             dispatch(fetchRedemptionRequests());
         } catch (err) {
             console.error('Error updating status:', err);

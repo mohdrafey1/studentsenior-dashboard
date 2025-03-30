@@ -80,7 +80,7 @@ export default function Branches() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-700">
+            <div className='flex items-center justify-center min-h-screen bg-white dark:bg-gray-700'>
                 <Spinner size={3} />
             </div>
         );
@@ -88,32 +88,32 @@ export default function Branches() {
 
     if (error)
         return (
-            <div className="text-center text-red-500 min-h-screen flex items-center justify-center">
+            <div className='text-center text-red-500 min-h-screen flex items-center justify-center'>
                 {error}
             </div>
         );
 
     return (
-        <div className="p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen">
-            <h1 className="text-3xl font-bold text-center text-indigo-400  mt-14 mb-2">
+        <div className='p-6 bg-indigo-50 dark:bg-gray-900 min-h-screen'>
+            <h1 className='text-3xl font-bold text-center text-indigo-400  mt-14 mb-2'>
                 Branches
             </h1>
 
             {/* Filters */}
-            <div className="mb-8 flex flex-col sm:flex-row gap-4 max-w-4xl mx-auto">
+            <div className='mb-8 flex flex-col sm:flex-row gap-4 max-w-4xl mx-auto'>
                 <input
-                    type="text"
-                    placeholder="Search by branch name or code..."
+                    type='text'
+                    placeholder='Search by branch name or code...'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full sm:w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
+                    className='w-full sm:w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white'
                 />
                 <select
                     value={courseFilter}
                     onChange={(e) => setCourseFilter(e.target.value)}
-                    className="w-full sm:w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white"
+                    className='w-full sm:w-1/2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white'
                 >
-                    <option value="">Filter by Course</option>
+                    <option value=''>Filter by Course</option>
                     {uniqueCourses.map((courseName) => (
                         <option key={courseName} value={courseName}>
                             {courseName}
@@ -123,73 +123,73 @@ export default function Branches() {
             </div>
 
             {/* Branch Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <div className='overflow-x-auto'>
+                <table className='min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md'>
                     <thead>
-                        <tr className="bg-indigo-50 dark:bg-gray-700">
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                        <tr className='bg-indigo-50 dark:bg-gray-700'>
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Branch Name
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Branch Code
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Course
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Subjects
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Seniors
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Notes
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 PYQs
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Clicks
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                            <th className='px-6 py-3 text-left text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider'>
                                 Created At
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
                         {currentBranches.map((branch) => (
                             <tr
                                 key={branch._id}
-                                className="hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                className='hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200'
                             >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.branchName}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.branchCode}
                                 </td>
                                 <td
                                     title={branch.course?.courseName}
-                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"
+                                    className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'
                                 >
                                     {branch.course?.courseCode}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.totalSubject}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.totalSenior}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.totalNotes}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.totalPyqs}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {branch.clickCounts}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200'>
                                     {new Date(
                                         branch.createdAt
                                     ).toLocaleDateString()}
@@ -201,7 +201,7 @@ export default function Branches() {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center">
+            <div className='flex justify-center'>
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
