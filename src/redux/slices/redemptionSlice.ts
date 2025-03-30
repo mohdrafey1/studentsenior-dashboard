@@ -13,7 +13,7 @@ interface RedemptionRequest {
     _id: string;
     upiId: string;
     rewardBalance: number;
-    status: boolean;
+    status: string;
     owner: Owner;
     createdAt: string;
 }
