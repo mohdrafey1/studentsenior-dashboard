@@ -13,6 +13,7 @@ interface Report {
     totalTransactions: number;
     totalRedemptionRequest: number;
     totalAffiliateProduct: number;
+    totalPayments: number;
 }
 
 interface ReportState {

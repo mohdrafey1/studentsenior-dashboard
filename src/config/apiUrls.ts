@@ -35,6 +35,8 @@ export const api = {
         transaction: `${API_BASE_URL}/dashboard/transactions`,
         redemption: `${API_BASE_URL}/dashboard/transactions/redemption`,
         addPoint: `${API_BASE_URL}/dashboard/transactions/add-points`,
+        payments: `${API_BASE_URL}/dashboard/transactions/all-payments`,
+        getPaymentById: `${API_BASE_URL}/dashboard/transactions/payments`,
     },
 
     store: {
