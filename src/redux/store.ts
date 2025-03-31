@@ -13,6 +13,8 @@ import usersReducer from './slices/usersSlice';
 import dashboardUsersReducer from './slices/dashboardUsersSlice';
 import subjectReducer from './slices/subjectSlice';
 import paymentsReducer from './slices/paymentListSlice';
+import branchesReducer from './slices/branchSlice';
+import coursesReducer from './slices/courseSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -53,6 +55,8 @@ const rootReducer = combineReducers({
     dashboardUsers: dashboardUsersReducer,
     subjects: subjectReducer,
     paymentList: paymentsReducer,
+    branches: branchesReducer,
+    courses: coursesReducer,
 });
 
 // Persisted reducer

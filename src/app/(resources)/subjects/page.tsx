@@ -26,11 +26,6 @@ interface FormData {
     branch: string;
 }
 
-interface ApiError {
-    message: string;
-    status?: number;
-}
-
 export default function Subjects() {
     const [searchQuery, setSearchQuery] = useState('');
     const [branchFilter, setBranchFilter] = useState('');
@@ -190,8 +185,9 @@ export default function Subjects() {
             dispatch(fetchSubjects());
             setIsModalOpen(false);
         } catch (error) {
-            const err = error as ApiError;
-            toast.error(err.message || 'Failed to Update subject');
+            toast.error(
+                typeof error === 'string' ? error : 'Failed to update subject'
+            );
         }
     };
 
@@ -202,8 +198,9 @@ export default function Subjects() {
             toast.success('Subject deleted successfully');
             setIsDeleteModalOpen(false);
         } catch (error) {
-            const err = error as ApiError;
-            toast.error(err.message || 'Failed to Update subject');
+            toast.error(
+                typeof error === 'string' ? error : 'Failed to delete subject'
+            );
         }
     };
 
