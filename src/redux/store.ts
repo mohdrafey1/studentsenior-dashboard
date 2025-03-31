@@ -15,6 +15,7 @@ import subjectReducer from './slices/subjectSlice';
 import paymentsReducer from './slices/paymentListSlice';
 import branchesReducer from './slices/branchSlice';
 import coursesReducer from './slices/courseSlice';
+import pyqsReducer from './slices/pyqSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
     paymentList: paymentsReducer,
     branches: branchesReducer,
     courses: coursesReducer,
+    pyqs: pyqsReducer,
 });
 
 // Persisted reducer
