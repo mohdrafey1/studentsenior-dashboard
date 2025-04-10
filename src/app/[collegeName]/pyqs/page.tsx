@@ -11,6 +11,21 @@ import Modal from '@/components/ui/Modal';
 import DeleteConfirmationModal from '@/components/ui/DeleteConfirmationModal';
 import toast from 'react-hot-toast';
 import { fetchPyqs, updatePyq, deletePyq, Pyq } from '@/redux/slices/pyqSlice';
+import { api, API_KEY } from '@/config/apiUrls';
+import {
+    FileText,
+    User,
+    Calendar,
+    CheckCircle,
+    MousePointer,
+    CreditCard,
+    IndianRupee,
+    UserCircle,
+    FileDown,
+    Loader2,
+    GraduationCap,
+    CheckSquare,
+} from 'lucide-react';
 
 export default function PyqPage() {
     const params = useParams();
@@ -34,6 +49,8 @@ export default function PyqPage() {
         isPaid: '',
         price: '',
     });
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const [pdfLoading, setPdfLoading] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
     const { pyqs, loading, error } = useSelector(
@@ -84,9 +101,39 @@ export default function PyqPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const openViewModal = (pyq: Pyq) => {
+    const fetchPdfUrl = async (fileUrl: string) => {
+        setPdfLoading(true);
+        try {
+            const response = await fetch(
+                `${api.getSignedUrl}?fileUrl=${encodeURIComponent(fileUrl)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY,
+                    } as HeadersInit,
+                    credentials: 'include',
+                }
+            );
+
+            const data = await response.json();
+            if (response.ok) {
+                setPdfUrl(data.signedUrl);
+            } else {
+                throw new Error('Failed to get signed PDF URL');
+            }
+        } catch (error) {
+            console.error('Error fetching signed PDF URL:', error);
+            toast.error('Failed to load PDF');
+        } finally {
+            setPdfLoading(false);
+        }
+    };
+
+    const openViewModal = async (pyq: Pyq) => {
         setCurrentPyq(pyq);
         setIsViewModalOpen(true);
+        await fetchPdfUrl(pyq.fileUrl);
     };
 
     const openEditModal = (pyq: Pyq) => {
@@ -331,139 +378,189 @@ export default function PyqPage() {
             {/* View PYQ Details Modal */}
             <Modal
                 isOpen={isViewModalOpen}
-                onClose={() => setIsViewModalOpen(false)}
+                onClose={() => {
+                    setIsViewModalOpen(false);
+                    setPdfUrl(null);
+                }}
                 title='PYQ Details'
+                className='max-w-4xl mx-auto'
             >
                 {currentPyq && (
-                    <div className='space-y-4'>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Subject
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.subject.subjectName}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Year
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.year}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Exam Type
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.examType}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Status
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.status ? 'Approved' : 'Pending'}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Uploaded By
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.owner.username}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    College
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.college}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Solved
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.solved ? 'Yes' : 'No'}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Paid
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.isPaid ? 'Yes' : 'No'}
-                                </p>
-                            </div>
-                            {currentPyq.isPaid && (
-                                <div>
-                                    <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                        Price
-                                    </h3>
-                                    <p className='text-gray-800 dark:text-gray-200'>
-                                        ₹{currentPyq.price}
-                                    </p>
+                    <div className='space-y-6'>
+                        {/* Header with quick stats */}
+                        <div className='bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-6 text-white shadow-lg'>
+                            <h2 className='text-2xl font-bold mb-2'>
+                                {currentPyq.subject.subjectName} (
+                                {currentPyq.year})
+                            </h2>
+                            <div className='flex flex-wrap gap-4 items-center text-sm'>
+                                <div className='flex items-center'>
+                                    <GraduationCap className='h-4 w-4 mr-1' />
+                                    <span>{currentPyq.college}</span>
                                 </div>
-                            )}
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Clicks
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {currentPyq.clickCounts}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                    Upload Date
-                                </h3>
-                                <p className='text-gray-800 dark:text-gray-200'>
-                                    {new Date(
-                                        currentPyq.createdAt
-                                    ).toLocaleDateString()}
-                                </p>
+                                <div className='flex items-center'>
+                                    <FileText className='h-4 w-4 mr-1' />
+                                    <span>{currentPyq.examType}</span>
+                                </div>
+                                <div className='flex items-center'>
+                                    <User className='h-4 w-4 mr-1' />
+                                    <span>{currentPyq.owner.username}</span>
+                                </div>
+                                <div className='flex items-center'>
+                                    <CheckCircle className='h-4 w-4 mr-1' />
+                                    <span>
+                                        {currentPyq.status
+                                            ? 'Approved'
+                                            : 'Pending'}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <h3 className='font-semibold text-gray-700 dark:text-gray-300'>
-                                Purchased By ({currentPyq.purchasedBy.length})
+                        {/* Main content in a card */}
+                        <div className='bg-white dark:bg-gray-800 rounded-lg shadow-md p-6'>
+                            {/* Stats in a grid */}
+                            <h3 className='text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3'>
+                                PYQ Information
                             </h3>
-                            {currentPyq.purchasedBy.length > 0 ? (
-                                <div className='mt-2 max-h-40 overflow-y-auto'>
-                                    {currentPyq.purchasedBy.map(
-                                        (userId, index) => (
-                                            <div
-                                                key={index}
-                                                className='py-1 border-b border-gray-200 dark:border-gray-700'
-                                            >
-                                                User ID: {userId}
-                                            </div>
-                                        )
-                                    )}
+                            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6'>
+                                <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex flex-col items-center'>
+                                    <div className='mb-1'>
+                                        <MousePointer className='h-5 w-5 text-blue-500' />
+                                    </div>
+                                    <div className='text-sm text-gray-500 dark:text-gray-400'>
+                                        Views
+                                    </div>
+                                    <div className='font-bold text-gray-900 dark:text-white'>
+                                        {currentPyq.clickCounts}
+                                    </div>
                                 </div>
-                            ) : (
-                                <p className='text-gray-500 dark:text-gray-400'>
-                                    No purchases yet
-                                </p>
-                            )}
+
+                                <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex flex-col items-center'>
+                                    <div className='mb-1'>
+                                        <CheckSquare className='h-5 w-5 text-green-500' />
+                                    </div>
+                                    <div className='text-sm text-gray-500 dark:text-gray-400'>
+                                        Solved
+                                    </div>
+                                    <div className='font-bold text-gray-900 dark:text-white'>
+                                        {currentPyq.solved ? 'Yes' : 'No'}
+                                    </div>
+                                </div>
+
+                                <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex flex-col items-center'>
+                                    <div className='mb-1'>
+                                        <CreditCard className='h-5 w-5 text-purple-500' />
+                                    </div>
+                                    <div className='text-sm text-gray-500 dark:text-gray-400'>
+                                        Paid
+                                    </div>
+                                    <div className='font-bold text-gray-900 dark:text-white'>
+                                        {currentPyq.isPaid ? 'Yes' : 'No'}
+                                    </div>
+                                </div>
+
+                                {currentPyq.isPaid && (
+                                    <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex flex-col items-center'>
+                                        <div className='mb-1'>
+                                            <IndianRupee className='h-5 w-5 text-emerald-500' />
+                                        </div>
+                                        <div className='text-sm text-gray-500 dark:text-gray-400'>
+                                            Price
+                                        </div>
+                                        <div className='font-bold text-gray-900 dark:text-white'>
+                                            ₹{currentPyq.price}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex flex-col items-center'>
+                                    <div className='mb-1'>
+                                        <Calendar className='h-5 w-5 text-orange-500' />
+                                    </div>
+                                    <div className='text-sm text-gray-500 dark:text-gray-400'>
+                                        Upload Date
+                                    </div>
+                                    <div className='font-bold text-gray-900 dark:text-white'>
+                                        {new Date(
+                                            currentPyq.createdAt
+                                        ).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Purchases section */}
+                            <div className='border-t dark:border-gray-700 pt-4'>
+                                <div className='flex items-center justify-between mb-3'>
+                                    <h3 className='text-lg font-semibold text-gray-700 dark:text-gray-300'>
+                                        Purchased By
+                                    </h3>
+                                    <span className='bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs font-medium px-2.5 py-0.5 rounded-full'>
+                                        {currentPyq.purchasedBy.length} users
+                                    </span>
+                                </div>
+
+                                {currentPyq.purchasedBy.length > 0 ? (
+                                    <div className='bg-gray-50 dark:bg-gray-700 rounded-md p-2 max-h-40 overflow-y-auto'>
+                                        {currentPyq.purchasedBy.map(
+                                            (userId, index) => (
+                                                <div
+                                                    key={index}
+                                                    className='flex items-center py-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md transition-colors'
+                                                >
+                                                    <UserCircle className='h-5 w-5 mr-2 text-gray-500' />
+                                                    <span className='text-gray-800 dark:text-gray-200'>
+                                                        User ID: {userId}
+                                                    </span>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className='bg-gray-50 dark:bg-gray-700 rounded-md p-4 text-center text-gray-500 dark:text-gray-400'>
+                                        No purchases yet
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-                        <div className='flex justify-end pt-4'>
-                            <a
-                                href={currentPyq.fileUrl}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                className='px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors'
+                        {/* Action buttons */}
+                        <div className='flex justify-end gap-3'>
+                            <button
+                                onClick={() => setIsViewModalOpen(false)}
+                                className='px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500'
                             >
-                                Open PDF
-                            </a>
+                                Close
+                            </button>
+
+                            {pdfLoading ? (
+                                <button
+                                    type='button'
+                                    className='px-4 py-2 bg-indigo-600 text-white rounded-md flex items-center justify-center disabled:opacity-70'
+                                    disabled
+                                >
+                                    <Loader2 className='h-4 w-4 mr-2 animate-spin' />
+                                    Loading PDF...
+                                </button>
+                            ) : pdfUrl ? (
+                                <a
+                                    href={pdfUrl}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                    className='px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-md hover:from-indigo-700 hover:to-purple-700 transition-colors flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                >
+                                    <FileDown className='h-5 w-5' />
+                                    <span>Open PDF</span>
+                                </a>
+                            ) : (
+                                <button
+                                    type='button'
+                                    className='px-4 py-2 bg-gray-400 text-white rounded-md cursor-not-allowed opacity-70'
+                                    disabled
+                                >
+                                    PDF Not Available
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}

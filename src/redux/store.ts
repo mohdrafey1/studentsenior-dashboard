@@ -16,6 +16,7 @@ import paymentsReducer from './slices/paymentListSlice';
 import branchesReducer from './slices/branchSlice';
 import coursesReducer from './slices/courseSlice';
 import pyqsReducer from './slices/pyqSlice';
+import notesReducer from './slices/notesSlice';
 
 // Noop storage to avoid server-side errors in SSR
 const noopStorage = {
@@ -33,13 +34,9 @@ const persistConfig = {
         'collegeData',
         'reportStats',
         'colleges',
-
-        'redemption',
-        'users',
-        'dashboardUsers',
-        'transactions',
-
-        'paymentList',
+        'subjects',
+        'pyqs',
+        'notes',
     ],
 };
 
@@ -59,6 +56,7 @@ const rootReducer = combineReducers({
     branches: branchesReducer,
     courses: coursesReducer,
     pyqs: pyqsReducer,
+    notes: notesReducer,
 });
 
 // Persisted reducer

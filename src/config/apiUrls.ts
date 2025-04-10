@@ -72,4 +72,6 @@ export const api = {
     opportunity: {
         getOpportunities: `${API_BASE_URL}/dashboard/opportunity`,
     },
+
+    getSignedUrl: `${API_BASE_URL}/api/get-signed-url`,
 };

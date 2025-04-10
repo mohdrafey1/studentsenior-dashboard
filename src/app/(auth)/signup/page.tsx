@@ -55,83 +55,83 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
-                <h2 className="text-3xl font-bold text-center text-indigo-400">
+        <div className='flex items-center justify-center min-h-screen bg-indigo-50 dark:bg-gray-900'>
+            <div className='w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg'>
+                <h2 className='text-3xl font-bold text-center text-indigo-400'>
                     Sign Up
                 </h2>
-                <form className="space-y-4" onSubmit={handleSignup}>
+                <form className='space-y-4' onSubmit={handleSignup}>
                     {/* Full Name */}
-                    <div className="relative">
-                        <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                    <div className='relative'>
+                        <FaUser className='absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400' />
                         <input
-                            type="text"
-                            placeholder="Full Name"
+                            type='text'
+                            placeholder='Full Name'
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            className='w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
                             required
                         />
                     </div>
 
                     {/* Email */}
-                    <div className="relative">
-                        <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                    <div className='relative'>
+                        <FaEnvelope className='absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400' />
                         <input
-                            type="email"
-                            placeholder="Email"
+                            type='email'
+                            placeholder='Email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            className='w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
                             required
                         />
                     </div>
 
                     {/* Password */}
-                    <div className="relative">
-                        <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                    <div className='relative'>
+                        <FaLock className='absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400' />
                         <input
-                            type="password"
-                            placeholder="Password"
+                            type='password'
+                            placeholder='Password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            className='w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
                             required
                         />
                     </div>
 
                     {/* College */}
-                    <div className="relative">
-                        <FaUniversity className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                    <div className='relative'>
+                        <FaUniversity className='absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400' />
                         <input
-                            type="text"
-                            placeholder="College"
+                            type='text'
+                            placeholder='College'
                             value={college}
                             onChange={(e) => setCollege(e.target.value)}
-                            className="w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            className='w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
                         />
                     </div>
 
                     {/* Secret Code */}
-                    <div className="relative">
-                        <FaKey className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                    <div className='relative'>
+                        <FaKey className='absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400' />
                         <input
-                            type="text"
-                            placeholder="Secret Code for Admin and Moderator (Optional)"
+                            type='text'
+                            placeholder='Secret Code for Admin and Moderator (Optional)'
                             value={secretCode}
                             onChange={(e) => setSecretCode(e.target.value)}
-                            className="w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            className='w-full p-3 pl-10 border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
                         />
                     </div>
 
                     {/* Sign Up Button */}
                     <button
-                        type="submit"
-                        className="w-full p-3 text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition-colors"
+                        type='submit'
+                        className='w-full p-3 text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition-colors'
                     >
                         Sign Up
                     </button>
-                    <Link href={'/login'} className="text-center">
+                    <Link href={'/login'} className='text-center'>
                         Already have an Account ? Sign In
                     </Link>
                 </form>
