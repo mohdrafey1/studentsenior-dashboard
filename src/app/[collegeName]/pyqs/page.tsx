@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { fetchPyqs } from '@/redux/slices/pyqSlice';
+import { deletePyq, fetchPyqs } from '@/redux/slices/pyqSlice';
 import PyqFilters from '@/components/Pyqs/PyqFilters';
 import PyqTable from '@/components/Pyqs/PyqTable';
 import PyqViewModal from '@/components/Pyqs/PyqViewModal';
@@ -13,6 +13,7 @@ import DeleteConfirmationModal from '@/components/ui/DeleteConfirmationModal';
 import Pagination from '@/components/ui/Pagination';
 import { Spinner } from '@/components/ui/Spinner';
 import { Pyq } from '@/redux/slices/pyqSlice';
+import toast from 'react-hot-toast';
 
 export default function PyqPage() {
     const params = useParams();
@@ -84,6 +85,19 @@ export default function PyqPage() {
     const openDeleteModal = (pyq: Pyq) => {
         setCurrentPyq(pyq);
         setIsDeleteModalOpen(true);
+    };
+
+    const handleDelete = async () => {
+        if (!currentPyq) return;
+        try {
+            await dispatch(deletePyq(currentPyq._id)).unwrap();
+            toast.success('PYQ deleted successfully');
+            setIsDeleteModalOpen(false);
+        } catch (error) {
+            toast.error(
+                typeof error === 'string' ? error : 'Failed to delete PYQ'
+            );
+        }
     };
 
     return (
