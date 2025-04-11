@@ -35,6 +35,8 @@ const persistConfig = {
         'reportStats',
         'colleges',
         'subjects',
+        'branches',
+        'courses',
         'pyqs',
         'notes',
     ],

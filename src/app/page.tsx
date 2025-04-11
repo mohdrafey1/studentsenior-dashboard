@@ -21,6 +21,7 @@ import {
     School,
     Filter,
 } from 'lucide-react';
+import Link from 'next/link';
 
 interface College {
     _id: string;
@@ -143,7 +144,7 @@ const Home = () => {
                             />
                         </div>
 
-                        <div className='flex gap-2 w-full md:w-auto'>
+                        <div className='flex justify-between gap-2 w-full md:w-auto'>
                             {/* Toggle Button for Inactive Colleges */}
                             <button
                                 onClick={() => setShowInactive(!showInactive)}
@@ -156,19 +157,25 @@ const Home = () => {
                                 {showInactive ? (
                                     <>
                                         <EyeOff className='w-4 h-4' />
-                                        <span className='hidden sm:inline'>
+                                        <span className=' sm:inline'>
                                             Hide Inactive
                                         </span>
                                     </>
                                 ) : (
                                     <>
                                         <Eye className='w-4 h-4' />
-                                        <span className='hidden sm:inline'>
+                                        <span className=' sm:inline'>
                                             Show Inactive
                                         </span>
                                     </>
                                 )}
                             </button>
+                            <Link
+                                href={'/reports'}
+                                className='md:hidden px-4 py-2 rounded-lg border flex items-center gap-2 transition-colors bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700'
+                            >
+                                Reports
+                            </Link>
                         </div>
                     </div>
                 </div>

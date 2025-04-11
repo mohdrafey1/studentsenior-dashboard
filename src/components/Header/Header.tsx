@@ -133,7 +133,7 @@ const Header = () => {
                             </button>
 
                             <div className='h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-medium'>
-                                U
+                                R
                             </div>
 
                             <button
