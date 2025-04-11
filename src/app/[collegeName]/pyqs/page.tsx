@@ -168,10 +168,7 @@ export default function PyqPage() {
                     <DeleteConfirmationModal
                         isOpen={isDeleteModalOpen}
                         onClose={() => setIsDeleteModalOpen(false)}
-                        onConfirm={() => {
-                            // Handle delete logic here
-                            setIsDeleteModalOpen(false);
-                        }}
+                        onConfirm={handleDelete}
                         title='Delete PYQ'
                         message={`Are you sure you want to delete PYQ of ${currentPyq.subject.subjectName} (${currentPyq.year}, ${currentPyq.examType})? This action cannot be undone.`}
                     />

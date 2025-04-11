@@ -4,11 +4,6 @@ import {
     User,
     Calendar,
     CheckCircle,
-    Heart,
-    MousePointer,
-    CreditCard,
-    IndianRupee,
-    UserCircle,
     FileDown,
     Loader2,
 } from 'lucide-react';
