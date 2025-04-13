@@ -37,32 +37,36 @@ const NotesTable: React.FC<NotesTableProps> = ({
         setExpandedId(expandedId === id ? null : id);
     };
 
-    if (error || notes.length === 0) {
+    if (notes.length === 0) {
         return (
             <div className='flex items-center justify-center min-h-[50vh]'>
-                <div className='text-center p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg max-w-md'>
-                    <div className='mb-4'>
-                        <svg
-                            className='w-16 h-16 mx-auto text-gray-400'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            stroke='currentColor'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth='2'
-                                d='M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                            />
-                        </svg>
+                {loading ? (
+                    <Spinner size={2} />
+                ) : (
+                    <div className='text-center p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg max-w-md'>
+                        <div className='mb-4'>
+                            <svg
+                                className='w-16 h-16 mx-auto text-gray-400'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                stroke='currentColor'
+                            >
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    strokeWidth='2'
+                                    d='M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                                />
+                            </svg>
+                        </div>
+                        <p className='text-xl font-semibold text-red-500 mb-2'>
+                            {error || 'No notes found'}
+                        </p>
+                        <p className='text-gray-500 dark:text-gray-400'>
+                            Try uploading a new note or check back later.
+                        </p>
                     </div>
-                    <p className='text-xl font-semibold text-red-500 mb-2'>
-                        {error || 'No notes found'}
-                    </p>
-                    <p className='text-gray-500 dark:text-gray-400'>
-                        Try uploading a new note or check back later.
-                    </p>
-                </div>
+                )}
             </div>
         );
     }
