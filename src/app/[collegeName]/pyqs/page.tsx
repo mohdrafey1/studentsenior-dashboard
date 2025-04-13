@@ -160,7 +160,10 @@ export default function PyqPage() {
 
                     <PyqEditModal
                         isOpen={isEditModalOpen}
-                        onClose={() => setIsEditModalOpen(false)}
+                        onClose={() => {
+                            setIsEditModalOpen(false);
+                            setCurrentPyq(null);
+                        }}
                         pyq={currentPyq}
                         collegeName={collegeName as string}
                     />

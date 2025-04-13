@@ -141,7 +141,10 @@ export default function NotesPage() {
 
             <NoteEditModal
                 isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
+                onClose={() => {
+                    setIsEditModalOpen(false);
+                    setCurrentNote(null);
+                }}
                 note={currentNote}
                 collegeName={collegeName as string}
             />
