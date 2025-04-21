@@ -278,6 +278,7 @@ export default function Courses() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 title={currentCourse ? 'Edit Course' : 'Add New Course'}
+                className='max-w-2xl'
             >
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <div>

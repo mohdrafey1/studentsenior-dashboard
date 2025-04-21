@@ -371,6 +371,7 @@ export default function Subjects() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 title={currentSubject ? 'Edit Subject' : 'Add New Subject'}
+                className='max-w-2xl'
             >
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <div>
@@ -462,7 +463,7 @@ export default function Subjects() {
                                                     (branch) => (
                                                         <div
                                                             key={branch._id}
-                                                            className={`px-4 py-2 cursor-pointer hover:bg-indigo-100 dark:hover:bg-gray-700 ${
+                                                            className={`px-4 py-2 cursor-pointer dark:text-white hover:bg-indigo-100 dark:hover:bg-gray-700 ${
                                                                 formData.branch ===
                                                                 branch._id
                                                                     ? 'bg-indigo-100 dark:bg-gray-700'

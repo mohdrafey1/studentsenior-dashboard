@@ -361,6 +361,7 @@ export default function Branches() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 title={currentBranch ? 'Edit Branch' : 'Add New Branch'}
+                className='max-w-2xl'
             >
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <div>
