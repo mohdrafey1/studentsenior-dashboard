@@ -17,8 +17,6 @@ import {
     User,
     LogOut,
     BookOpen,
-    Bell,
-    Settings,
 } from 'lucide-react';
 
 const Header = () => {
@@ -52,10 +50,6 @@ const Header = () => {
         router.push('/login');
     };
 
-    const handleSetting = () => {
-        toast.success('feature coming soon');
-    };
-
     const navigationLinks = [
         { name: 'Home', href: '/', icon: <Home className='w-5 h-5' /> },
         {
@@ -68,11 +62,11 @@ const Header = () => {
             href: '/',
             icon: <BookOpen className='w-5 h-5' />,
         },
-        {
-            name: 'Notifications',
-            href: '/',
-            icon: <Bell className='w-5 h-5' />,
-        },
+        // {
+        //     name: 'Notifications',
+        //     href: '/',
+        //     icon: <Bell className='w-5 h-5' />,
+        // },
         {
             name: 'Profile',
             href: '/profile',
@@ -125,12 +119,12 @@ const Header = () => {
 
                     {isAuthenticated ? (
                         <div className='hidden md:flex items-center gap-3'>
-                            <button
+                            {/* <button
                                 onClick={handleSetting}
                                 className='p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'
                             >
                                 <Settings className='w-5 h-5 text-gray-600 dark:text-gray-400' />
-                            </button>
+                            </button> */}
 
                             <div className='h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-medium'>
                                 R
