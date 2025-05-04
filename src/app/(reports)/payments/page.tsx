@@ -42,7 +42,7 @@ export default function AllPayments() {
         dispatch(fetchPayments());
     }, [dispatch]);
 
-    // Apply date filter
+    // First filter by date range only
     const getFilteredByDate = (paymentsList: typeof payments) => {
         if (dateFilter === 'all') return paymentsList;
 
@@ -56,22 +56,20 @@ export default function AllPayments() {
         });
     };
 
-    // Filter payments
-    const filteredPayments = getFilteredByDate(
-        payments.filter(
-            (payment) =>
-                (payment.user?.email?.toLowerCase() || '').includes(
-                    searchQuery.trim().toLowerCase()
-                ) &&
-                (filterType
-                    ? (payment.typeOfPurchase?.toLowerCase() || '') ===
-                      filterType.toLowerCase()
-                    : true) &&
-                (filterStatus
-                    ? (payment.status?.toLowerCase() || '') ===
-                      filterStatus.toLowerCase()
-                    : true)
-        )
+    // Then apply other filters to the date-filtered payments
+    const filteredPayments = getFilteredByDate(payments).filter(
+        (payment) =>
+            (payment.user?.email?.toLowerCase() || '').includes(
+                searchQuery.trim().toLowerCase()
+            ) &&
+            (filterType
+                ? (payment.typeOfPurchase?.toLowerCase() || '') ===
+                  filterType.toLowerCase()
+                : true) &&
+            (filterStatus
+                ? (payment.status?.toLowerCase() || '') ===
+                  filterStatus.toLowerCase()
+                : true)
     );
 
     // Calculate total amount

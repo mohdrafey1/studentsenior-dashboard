@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/slices/authSlice';
 import { RootState } from '@/redux/store';
-import toast from 'react-hot-toast';
 import {
     Sun,
     Moon,
