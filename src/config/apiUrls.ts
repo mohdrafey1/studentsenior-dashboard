@@ -74,4 +74,8 @@ export const api = {
     },
 
     getSignedUrl: `${API_BASE_URL}/api/get-signed-url`,
+
+    course: {
+        enrollCourse: `${API_BASE_URL}/courseapi/course/enroll`,
+    },
 };
